@@ -1,0 +1,24 @@
+@use "variables" as *;
+
+@font-face {
+  font-family: "TuskerGrotesk";
+  font-weight: normal;
+  font-style: normal;
+  src: url("./TuskerGrotesk-4500Medium.woff2");
+}
+
+body {
+  background-color: $color-beige-500;
+  font-family: Montserrat, sans-serif;
+  color: $color-black-500;
+  margin: 0;
+}
+
+.red-text {
+  color: $color-red-500;
+}
+
+.tusker-font {
+  font-family: TuskerGrotesk;
+  font-weight: 300;
+}

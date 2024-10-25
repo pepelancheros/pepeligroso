@@ -1,0 +1,17 @@
+@use "/src/assets/variables" as *;
+
+.navbar {
+  padding: $size-16 $size-32;
+  position: fixed;
+  background-color: $color-beige-500;
+  z-index: 100;
+  width: 100%;
+
+  h2 {
+    margin: 0;
+  }
+
+  &__title {
+    font-weight: 500;
+  }
+}

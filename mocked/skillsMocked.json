@@ -1,0 +1,54 @@
+{
+  "skills": [
+    {
+      "id": 1,
+      "name": "JAVASCRIPT",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"
+    },
+    {
+      "id": 2,
+      "name": "VUE.JS",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg"
+    },
+    {
+      "id": 3,
+      "name": "REACT.JS",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg"
+    },
+    {
+      "id": 4,
+      "name": "BOOTSTRAP",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/b/b2/Bootstrap_logo.svg"
+    },
+    {
+      "id": 5,
+      "name": "TYPESCRIPT",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg"
+    },
+    {
+      "id": 6,
+      "name": "FIGMA",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg"
+    },
+    {
+      "id": 7,
+      "name": "GIT",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg"
+    },
+    {
+      "id": 8,
+      "name": "TAILWIND",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg"
+    },
+    {
+      "id": 9,
+      "name": "RESPONSIVE DESIGN",
+      "src": ""
+    },
+    {
+      "id": 10,
+      "name": "CHROME EXTENSIONS",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg"
+    }
+  ]
+}

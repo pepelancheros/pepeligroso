@@ -1,4 +1,5 @@
 import Navbar from "./components/Navbar/Navbar.jsx";
+import { HomeView } from "./views/Home/Home.jsx";
 
 function App() {
   return (
@@ -6,7 +7,7 @@ function App() {
       <header>
         <Navbar />
       </header>
-      <div className="content">content</div>
+      <HomeView />
     </div>
   );
 }

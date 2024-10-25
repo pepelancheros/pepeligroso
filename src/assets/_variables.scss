@@ -1,0 +1,27 @@
+@use "../utilities/mixins.scss" as *;
+
+$color-black-500: #384347;
+$color-red-500: #a41623;
+$color-beige-500: #efe5df;
+$color-green-500: #597656;
+
+// Sizes system in rem to use in the font-sizes, spacing, etc.
+$size-4: pxToRem(4px);
+$size-8: pxToRem(8px);
+$size-12: pxToRem(12px);
+$size-16: pxToRem(16px);
+$size-24: pxToRem(24px);
+$size-32: pxToRem(32px);
+$size-48: pxToRem(48px);
+$size-64: pxToRem(64px);
+$size-96: pxToRem(96px);
+$size-128: pxToRem(128px);
+$size-192: pxToRem(192px);
+$size-256: pxToRem(256px);
+$size-384: pxToRem(384px);
+$size-512: pxToRem(512px);
+$size-640: pxToRem(640px);
+$size-768: pxToRem(768px);
+$size-896: pxToRem(896px);
+$size-1024: pxToRem(1024px);
+$size-1280: pxToRem(1280px);

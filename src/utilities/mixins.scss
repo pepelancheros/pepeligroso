@@ -1,0 +1,14 @@
+// FontRem: Converts px value to rem
+// use: .txt {
+//			@include font-rem(40px);
+//		 }
+// Result: font-size: 2.5rem;
+
+@function pxToRem($size) {
+  @return calc($size / 16px) * 1rem;
+}
+
+@mixin font-rem($size) {
+  font-size: $size; //Fallback in px
+  font-size: pxToRem($size);
+}
