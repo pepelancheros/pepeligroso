@@ -2,6 +2,9 @@ import avatar from "../../../public/assets/images/avatars.svg";
 import pepeSad from "../../../public/assets/images/pepe-sad.png";
 import arrow from "../../../public/assets/images/arrow.png";
 
+import skillsJson from "../../mocked/skillsMocked.json";
+const skills = skillsJson.skills;
+
 import "./Home.scss";
 
 export function HomeView() {
@@ -56,7 +59,14 @@ export function HomeView() {
           SKILLS, TOOLS AND TECHNOLOGIES
         </h2>
         <p className="skills__subtitle">I am really good at</p>
-        <div className="skills__container"></div>
+        <div className="skills__container">
+          {skills.map((skill) => (
+            <div className="skills__skill">
+              <img className="skills__skill-image" src={skill.src} alt="" />
+              <p className="skills__skill-name">{skill.name}</p>
+            </div>
+          ))}
+        </div>
       </section>
     </main>
   );

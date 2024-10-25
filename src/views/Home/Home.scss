@@ -116,10 +116,33 @@
   &__title {
     color: $color-red-500;
     text-align: center;
+    margin-bottom: $size-8;
   }
 
   &__subtitle {
     text-align: center;
+    font-size: $size-16;
+    margin-top: 0;
+  }
+
+  &__container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: $size-64;
+  }
+
+  &__skill {
+    max-height: 100px;
+    max-width: 130px;
+    min-width: 100px;
+    margin: $size-32 $size-64;
+    text-align: center;
+  }
+
+  &__skill-image {
+    height: 100%;
+    max-width: 100%;
   }
 }
 
@@ -188,6 +211,7 @@
 
     &__subtitle {
       text-align: end;
+      font-size: $size-24;
     }
   }
 }
