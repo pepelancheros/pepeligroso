@@ -136,7 +136,7 @@
     max-height: 100px;
     max-width: 130px;
     min-width: 100px;
-    margin: $size-32 $size-64;
+    margin: $size-32 $size-12;
     text-align: center;
   }
 
@@ -205,6 +205,10 @@
   }
 
   .skills {
+    &__skill {
+      margin: $size-32 $size-64;
+    }
+
     &__title {
       text-align: end;
     }
