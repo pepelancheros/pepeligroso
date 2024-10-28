@@ -11,11 +11,6 @@
     "type": "git",
     "url": "git+https://github.com/pepelancheros/pepeligroso.git"
   },
-  "sideEffects": [
-    "*.css",
-    "*.scss",
-    "*.sass"
-  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
