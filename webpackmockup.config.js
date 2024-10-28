@@ -1,6 +1,5 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { stat } = require("fs");
 const { type } = require("os");
 
 module.exports = {
