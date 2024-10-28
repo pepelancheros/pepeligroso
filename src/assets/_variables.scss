@@ -1,10 +1,14 @@
 @use "../utilities/mixins.scss" as *;
 
 $color-black-500: #384347;
+$color-gray-200: #d9d9d9;
+
 $color-red-500: #a41623;
 $color-beige-500: #efe5df;
 $color-green-500: #597656;
 $color-blue-500: #07004d;
+
+$generic-border: 1px solid rgba(56, 67, 71, 0.37);
 
 // Sizes system in rem to use in the font-sizes, spacing, etc.
 $size-4: pxToRem(4px);

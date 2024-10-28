@@ -1,11 +1,11 @@
 @use "/src/assets/variables" as *;
+@use "sass:math";
 
 .home {
-  max-width: $size-1280;
-  margin: auto;
-  padding: 0 $size-24;
-
   &__banner {
+    max-width: $size-1280;
+    margin: auto;
+    padding: 0 $size-24;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -62,18 +62,25 @@
   }
 
   &__button {
-    font-size: 32px;
+    font-size: $size-24;
     color: $color-beige-500;
     background-color: $color-red-500;
     border: none;
     padding: $size-12 $size-24 $size-8;
     border-radius: 50px;
     align-self: flex-end;
-    margin-bottom: $size-32;
+    text-decoration: none;
+
+    &--banner {
+      margin-bottom: $size-32;
+    }
   }
 }
 
 .about {
+  max-width: $size-1280;
+  margin: auto;
+  padding: 0 $size-24;
   margin-top: $size-64;
   margin-bottom: $size-64;
 
@@ -113,6 +120,9 @@
 }
 
 .skills {
+  max-width: $size-1280;
+  margin: auto;
+  padding: 0 $size-24;
   margin-bottom: $size-96;
 
   &__title {
@@ -135,19 +145,24 @@
   }
 
   &__skill {
-    max-width: 130px;
-    min-width: 100px;
-    margin: $size-32 $size-12;
+    max-width: 100px;
+    min-width: 80px;
+    margin: $size-24 $size-24;
     text-align: center;
   }
 
   &__skill-image {
-    height: 100px;
+    height: 50px;
     max-width: 100%;
   }
 }
 
 .portfolio {
+  max-width: $size-1280;
+  margin: auto;
+  padding: 0 $size-24;
+  margin-bottom: $size-96;
+
   &__title {
     text-align: center;
   }
@@ -196,6 +211,129 @@
   }
 }
 
+.contact {
+  margin-bottom: $size-96;
+
+  &__container {
+    max-width: $size-1280;
+    margin: auto;
+    padding: 0 $size-24;
+  }
+  &__title {
+    color: $color-red-500;
+    text-align: center;
+  }
+
+  &__subtitle {
+    text-align: center;
+    font-size: $size-16;
+    margin-top: 0;
+    margin-bottom: $size-48;
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background-color: $color-gray-200;
+    margin-bottom: $size-16;
+  }
+
+  &__list-element {
+    font-family: TuskerGrotesk;
+    font-weight: 300;
+    font-size: $size-16;
+    padding: $size-16 $size-12;
+    text-align: center;
+    color: $color-black-500;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  &__star {
+    font-size: $size-24;
+    margin-left: $size-24;
+  }
+
+  &__text-and-button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: $size-32 0;
+  }
+
+  &__text {
+    margin: 0;
+  }
+
+  &__social-media {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: $generic-border;
+    padding-top: $size-48;
+
+    img {
+      height: 50px;
+      margin-right: $size-16;
+    }
+
+    a {
+      display: flex;
+      text-decoration: none;
+      align-items: center;
+      color: $color-black-500;
+      margin: 0 $size-24;
+
+      &:hover {
+        color: $color-blue-500;
+      }
+
+      p {
+        font-size: $size-24;
+        margin: 0;
+        display: none;
+      }
+    }
+  }
+
+  // auto scroll animation begins
+  $n: 5;
+  &__list {
+    --d: 30s; /* duration */
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* number of visible images */
+    overflow: hidden;
+  }
+
+  &__list-element {
+    grid-area: 1/1;
+    animation: r var(--d) linear infinite;
+  }
+
+  ul.scroll-reverse li {
+    animation-direction: reverse;
+  }
+
+  @for $i from 2 to ($n + 1) {
+    ul > li:nth-child(#{$i}) {
+      animation-delay: calc((1 - $i) / $n * var(--d));
+    }
+  }
+
+  @keyframes r {
+    #{math.percentage(math.div(1, $n))} {
+      transform: translate(-100%);
+    }
+    #{math.percentage(calc(1/$n + 0.0001))} {
+      transform: translate(($n - 1) * 100%);
+    }
+  }
+  // auto scroll animation ends
+}
+
 // styles for tablet size (768px) and higher
 @media all and (min-width: 48em) {
   .home {
@@ -218,6 +356,10 @@
     &__description {
       max-width: $size-512;
       font-size: $size-24;
+    }
+
+    &__button {
+      font-size: $size-32;
     }
   }
 
@@ -256,7 +398,11 @@
 
   .skills {
     &__skill {
-      margin: $size-32 $size-64;
+      margin: $size-24 $size-64;
+    }
+
+    &__skill-image {
+      height: 80px;
     }
 
     &__title {
@@ -286,7 +432,7 @@
         transition: all 0.3s ease-in-out;
       }
       p {
-        max-width: 600px;
+        max-width: 500px;
         transition: all 0.3s ease-in-out;
       }
 
@@ -299,6 +445,47 @@
         img {
           transform: scale(1.05);
         }
+      }
+    }
+  }
+
+  .contact {
+    &__title {
+      text-align: right;
+    }
+
+    &__subtitle {
+      text-align: right;
+      font-size: $size-24;
+      max-width: 800px;
+      margin-left: auto;
+    }
+
+    &__list-element {
+      font-size: $size-32;
+      padding: $size-24 $size-12;
+    }
+
+    &__star {
+      font-size: $size-48;
+      margin-left: $size-32;
+    }
+
+    &__text-and-button-container {
+      margin: $size-48 0;
+    }
+
+    &__text {
+      font-size: $size-32;
+    }
+
+    &__social-media {
+      img {
+        height: 60px;
+      }
+
+      a p {
+        display: block;
       }
     }
   }

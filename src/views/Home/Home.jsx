@@ -27,7 +27,12 @@ export function HomeView() {
             based in Colombia with more than 5 years of experience building
             pixel-perfect, accessible and user friendly websites.
           </p>
-          <a className="tusker-font home__button">CONTACT ME</a>
+          <a
+            href="#contact"
+            className="tusker-font home__button home__button--banner"
+          >
+            CONTACT ME
+          </a>
         </div>
       </section>
       <section className="about">
@@ -124,6 +129,124 @@ export function HomeView() {
               Website development, frontend, React.js, React Router, REST API
             </p>
           </a>
+        </div>
+      </section>
+      <section className="contact" id="contact">
+        <div className="contact__container">
+          <h2 className="tusker-font contact__title home__subtitle">
+            LET'S CONNECT
+          </h2>
+          <p className="contact__subtitle">
+            If you have any questions or want to work together, feel free to
+            contact me, I'm always interested in:
+          </p>
+        </div>
+        <ul className="contact__list">
+          <li className="contact__list-element">
+            WEB DEVELOPMENT
+            <span className="contact__star material-symbols-outlined">
+              stars
+            </span>
+          </li>
+          <li className="contact__list-element">
+            WEB DESIGN
+            <span className="contact__star material-symbols-outlined">
+              stars
+            </span>
+          </li>
+          <li className="contact__list-element">
+            SMALL BUSINESSES
+            <span className="contact__star material-symbols-outlined">
+              stars
+            </span>
+          </li>
+          <li className="contact__list-element">
+            STARUPS
+            <span className="contact__star material-symbols-outlined">
+              stars
+            </span>
+          </li>
+          <li className="contact__list-element">
+            FREELANCE
+            <span className="contact__star material-symbols-outlined">
+              stars
+            </span>
+          </li>
+        </ul>
+        <ul className="contact__list scroll-reverse">
+          <li className="contact__list-element">
+            PHOTOGRAPHY
+            <span className="contact__star material-symbols-outlined">
+              stars
+            </span>
+          </li>
+          <li className="contact__list-element">
+            VIDEOGRAPHY
+            <span className="contact__star material-symbols-outlined">
+              stars
+            </span>
+          </li>
+          <li className="contact__list-element">
+            DRONES
+            <span className="contact__star material-symbols-outlined">
+              stars
+            </span>
+          </li>
+          <li className="contact__list-element">
+            VIDEO AND PHOTO EDITING
+            <span className="contact__star material-symbols-outlined">
+              stars
+            </span>
+          </li>
+          <li className="contact__list-element">
+            TRAVELING
+            <span className="contact__star material-symbols-outlined">
+              stars
+            </span>
+          </li>
+        </ul>
+        <div className="contact__container">
+          <div className="contact__text-and-button-container">
+            <p className="contact__text">Are you minding a project?</p>
+            <a href="" className="tusker-font home__button">
+              CONTACT ME
+            </a>
+          </div>
+          <div className="contact__social-media">
+            <a
+              href="https://github.com/pepelancheros"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/c/c2/GitHub_Invertocat_Logo.svg"
+                alt="github logo"
+              />
+              <p>pepelancheros</p>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/sebastian-lancheros/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Linkedin-logo-blue-In-square-40px.png"
+                alt="linkedin logo"
+              />
+              <p>Sebastian Lancheros</p>
+            </a>
+            <a
+              href="https://www.instagram.com/pepeligroso_/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
+                alt="instagram logo"
+              />
+              <p>@pepeligroso_</p>
+            </a>
+          </div>
         </div>
       </section>
     </main>
