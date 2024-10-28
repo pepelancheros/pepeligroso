@@ -33,6 +33,9 @@ module.exports = {
       },
     ],
   },
+  resolve: {
+    extensions: [".scss", ".js", ".jsx", "..."],
+  },
   plugins: [
     new HtmlWebpackPlugin({
       title: "Pepeligroso's Portfolio",
