@@ -38,6 +38,7 @@ module.exports = {
       title: "Pepeligroso's Portfolio",
       filename: "index.html",
       template: "./index.html",
+      favicon: "./public/favicon.ico",
     }),
   ],
 };

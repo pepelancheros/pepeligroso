@@ -68,7 +68,7 @@ export function HomeView() {
         <p className="skills__subtitle">I am really good at</p>
         <div className="skills__container">
           {skills.map((skill) => (
-            <div className="skills__skill">
+            <div className="skills__skill" key={skill.id}>
               <img className="skills__skill-image" src={skill.src} alt="" />
               <p className="skills__skill-name">{skill.name}</p>
             </div>
