@@ -1,6 +1,8 @@
 import avatar from "../../../public/assets/images/avatars.svg";
 import pepeSad from "../../../public/assets/images/pepe-sad.png";
 import arrow from "../../../public/assets/images/arrow.png";
+import dicapta from "../../../public/assets/images/logo-dicapta.png";
+import githubExplorer from "../../../public/assets/images/github-explorer.png";
 
 import skillsJson from "../../mocked/skillsMocked.json";
 const skills = skillsJson.skills;
@@ -66,6 +68,62 @@ export function HomeView() {
               <p className="skills__skill-name">{skill.name}</p>
             </div>
           ))}
+        </div>
+      </section>
+      <section className="portfolio">
+        <h2 className="tusker-font portfolio__title home__subtitle">
+          FEATURED WORKS
+        </h2>
+        <p className="portfolio__subtitle">
+          Some work and personal projects that I have done
+        </p>
+        <div className="portfolio__content-container">
+          <a
+            href="https://dicapta.netlify.app/"
+            rel="noopener noreferrer"
+            target="_blank"
+            className="portfolio__element-container"
+          >
+            <img src={dicapta} alt="dicapta logo" />
+            <p>
+              Website development, frontend, Vue.js, Vue Router, CMS integration
+            </p>
+          </a>
+          <a
+            href="https://indexes.morningstar.com/"
+            rel="noopener noreferrer"
+            target="_blank"
+            className="portfolio__element-container"
+          >
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/6/67/Morningstar_Logo.svg"
+              alt="morningstar logo"
+            />
+            <p>
+              Website development, frontend, Vue.js, robust page, CMS
+              integration, design
+            </p>
+          </a>
+          <a href="" className="portfolio__element-container">
+            <img
+              src="https://cdn.prod.website-files.com/605f2547102fdbbeff1b21e0/60eef7c33281b745d059ca69_proper.png"
+              alt="proper logo"
+            />
+            <p>
+              Website and chrome extension development, Vue.js, CMS integration
+            </p>
+          </a>
+          <a
+            href="https://github-explorer-with-react.netlify.app/"
+            rel="noopener noreferrer"
+            target="_blank"
+            className="portfolio__element-container portfolio__element-container--github-explorer"
+          >
+            <img src={githubExplorer} alt="github explorer logo" />
+            <p>
+              Website development, frontend, React.js, React Router, REST API
+            </p>
+          </a>
         </div>
       </section>
     </main>
