@@ -208,7 +208,10 @@ export function HomeView() {
         <div className="contact__container">
           <div className="contact__text-and-button-container">
             <p className="contact__text">Are you minding a project?</p>
-            <a href="" className="tusker-font home__button">
+            <a
+              href="mailto:pepe.lancheros@gmail.com"
+              className="tusker-font home__button"
+            >
               CONTACT ME
             </a>
           </div>
