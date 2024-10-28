@@ -212,7 +212,7 @@ export function HomeView() {
               href="mailto:pepe.lancheros@gmail.com"
               className="tusker-font home__button"
             >
-              CONTACT ME
+              SEND ME AN EMAIL
             </a>
           </div>
           <div className="contact__social-media">

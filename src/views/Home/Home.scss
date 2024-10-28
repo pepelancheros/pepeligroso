@@ -74,6 +74,11 @@
     &--banner {
       margin-bottom: $size-32;
     }
+
+    &:hover,
+    &:focus {
+      box-shadow: 0 16px 24px 0 rgba(0, 0, 0, 0.12);
+    }
   }
 }
 
@@ -261,10 +266,12 @@
     justify-content: space-between;
     align-items: center;
     margin: $size-32 0;
+    flex-wrap: wrap;
   }
 
   &__text {
     margin: 0;
+    margin-bottom: $size-16;
   }
 
   &__social-media {
@@ -477,6 +484,7 @@
 
     &__text {
       font-size: $size-32;
+      margin-bottom: 0;
     }
 
     &__social-media {
