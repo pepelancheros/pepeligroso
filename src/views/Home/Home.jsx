@@ -102,8 +102,8 @@ export function HomeView() {
           <div
             data-aos="fade-down"
             data-aos-easing="ease-in-out"
-            data-aos-duration={Math.floor(Math.random() * 1000) + 2000}
-            data-aos-delay={Math.floor(Math.random() * 1000) + 2000}
+            data-aos-duration={Math.floor(Math.random() * 1000) + 1200}
+            data-aos-delay={Math.floor(Math.random() * 1000) + 1200}
             className="portfolio__element-container portfolio__element-container--dicapta"
           >
             <Card
@@ -116,8 +116,8 @@ export function HomeView() {
           <div
             data-aos="fade-up-left"
             data-aos-easing="ease-in-out"
-            data-aos-duration={Math.floor(Math.random() * 1000) + 2000}
-            data-aos-delay={Math.floor(Math.random() * 1000) + 2000}
+            data-aos-duration={Math.floor(Math.random() * 1000) + 1200}
+            data-aos-delay={Math.floor(Math.random() * 1000) + 1200}
             className="portfolio__element-container portfolio__element-container--morningstar"
           >
             <Card
@@ -130,8 +130,8 @@ export function HomeView() {
           <div
             data-aos="fade-up"
             data-aos-easing="ease-in-out"
-            data-aos-duration={Math.floor(Math.random() * 1000) + 2000}
-            data-aos-delay={Math.floor(Math.random() * 1000) + 2000}
+            data-aos-duration={Math.floor(Math.random() * 1000) + 1200}
+            data-aos-delay={Math.floor(Math.random() * 1000) + 1200}
             className="portfolio__element-container"
           >
             <Card
@@ -144,8 +144,8 @@ export function HomeView() {
           <div
             data-aos="fade-up-right"
             data-aos-easing="ease-in-out"
-            data-aos-duration={Math.floor(Math.random() * 1000) + 2000}
-            data-aos-delay={Math.floor(Math.random() * 1000) + 2000}
+            data-aos-duration={Math.floor(Math.random() * 1000) + 1200}
+            data-aos-delay={Math.floor(Math.random() * 1000) + 1200}
             className="portfolio__element-container portfolio__element-container--github-explorer"
           >
             <Card
