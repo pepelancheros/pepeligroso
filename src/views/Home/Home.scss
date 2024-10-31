@@ -176,41 +176,35 @@
     text-align: center;
     font-size: $size-16;
     margin-top: 0;
-    margin-bottom: $size-48;
+    margin-bottom: $size-32;
   }
 
   &__content-container {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-around;
   }
 
   &__element-container {
-    margin-bottom: $size-12;
+    margin-bottom: $size-32;
     text-decoration: none;
-    max-width: fit-content;
-
-    img {
-      max-height: 100px;
-      max-width: 300px;
-    }
-
-    p {
-      max-width: 500px;
-      color: $color-black-500;
-    }
-
-    &:nth-of-type(odd) {
-      align-self: flex-start;
-    }
-
-    &:nth-of-type(even) {
-      align-self: flex-end;
-      text-align: right;
-    }
 
     &--github-explorer {
       img {
         border-radius: 50px;
+        margin-left: 0;
+      }
+    }
+
+    &--morningstar {
+      img {
+        margin-top: $size-48;
+      }
+    }
+
+    &--dicapta {
+      img {
+        margin-top: $size-4;
       }
     }
   }
@@ -431,28 +425,6 @@
     &__subtitle {
       text-align: left;
       font-size: $size-24;
-    }
-
-    &__element-container {
-      img {
-        max-width: 500px;
-        transition: all 0.3s ease-in-out;
-      }
-      p {
-        max-width: 500px;
-        transition: all 0.3s ease-in-out;
-      }
-
-      &:hover {
-        p {
-          color: $color-blue-500;
-          font-weight: 500;
-        }
-
-        img {
-          transform: scale(1.05);
-        }
-      }
     }
   }
 

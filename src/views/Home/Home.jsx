@@ -4,6 +4,8 @@ import arrow from "../../../public/assets/images/arrow.png";
 import dicapta from "../../../public/assets/images/logo-dicapta.png";
 import githubExplorer from "../../../public/assets/images/github-explorer.png";
 
+import Card from "../../components/Card/Card.jsx";
+
 import skillsJson from "../../mocked/skillsMocked.json";
 const skills = skillsJson.skills;
 
@@ -83,52 +85,38 @@ export function HomeView() {
           Some work and personal projects that I have done
         </p>
         <div className="portfolio__content-container">
-          <a
-            href="https://dicapta.netlify.app/"
-            rel="noopener noreferrer"
-            target="_blank"
-            className="portfolio__element-container"
-          >
-            <img src={dicapta} alt="dicapta logo" />
-            <p>
-              Website development, frontend, Vue.js, Vue Router, CMS integration
-            </p>
-          </a>
-          <a
-            href="https://indexes.morningstar.com/"
-            rel="noopener noreferrer"
-            target="_blank"
-            className="portfolio__element-container"
-          >
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/6/67/Morningstar_Logo.svg"
-              alt="morningstar logo"
+          <div className="portfolio__element-container portfolio__element-container--dicapta">
+            <Card
+              img={dicapta}
+              text="Website migration and development. Made with Vue.js, Vue Router and CMS integration."
+              bgColor="#006CB6"
+              link="https://dicapta.netlify.app/"
             />
-            <p>
-              Website development, frontend, Vue.js, robust page, CMS
-              integration, design
-            </p>
-          </a>
-          <a href="" className="portfolio__element-container">
-            <img
-              src="https://cdn.prod.website-files.com/605f2547102fdbbeff1b21e0/60eef7c33281b745d059ca69_proper.png"
-              alt="proper logo"
+          </div>
+          <div className="portfolio__element-container portfolio__element-container--morningstar">
+            <Card
+              img="https://upload.wikimedia.org/wikipedia/commons/6/67/Morningstar_Logo.svg"
+              text="Development of a large website. With Vue.js, CMS
+              integration and design."
+              link="https://indexes.morningstar.com/"
             />
-            <p>
-              Website and chrome extension development, Vue.js, CMS integration
-            </p>
-          </a>
-          <a
-            href="https://github-explorer-with-react.netlify.app/"
-            rel="noopener noreferrer"
-            target="_blank"
-            className="portfolio__element-container portfolio__element-container--github-explorer"
-          >
-            <img src={githubExplorer} alt="github explorer logo" />
-            <p>
-              Website development, frontend, React.js, React Router, REST API
-            </p>
-          </a>
+          </div>
+          <div className="portfolio__element-container">
+            <Card
+              img="https://cdn.prod.website-files.com/605f2547102fdbbeff1b21e0/60eef7c33281b745d059ca69_proper.png"
+              text="Website and chrome extension development. With Vue.js and CMS integration."
+              bgColor="#200c54"
+              hideLinkText={true}
+            />
+          </div>
+          <div className="portfolio__element-container portfolio__element-container--github-explorer">
+            <Card
+              img={githubExplorer}
+              text="Website development. Made with React.js, React Router and the GitHub REST API."
+              bgColor="#151526"
+              link="https://github-explorer-with-react.netlify.app/"
+            />
+          </div>
         </div>
       </section>
       <section className="contact" id="contact">
