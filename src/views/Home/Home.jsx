@@ -97,14 +97,14 @@ export function HomeView() {
             <Card
               img="https://upload.wikimedia.org/wikipedia/commons/6/67/Morningstar_Logo.svg"
               text="Development of a large website. With Vue.js, CMS
-              integration and design."
+              integration, RESTful API and design."
               link="https://indexes.morningstar.com/"
             />
           </div>
           <div className="portfolio__element-container">
             <Card
               img="https://cdn.prod.website-files.com/605f2547102fdbbeff1b21e0/60eef7c33281b745d059ca69_proper.png"
-              text="Website and chrome extension development. With Vue.js and CMS integration."
+              text="Development of a website and a Google Chrome extension. With Vue.js and CMS integration."
               bgColor="#200c54"
               hideLinkText={true}
             />
