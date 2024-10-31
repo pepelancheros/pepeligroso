@@ -3,6 +3,9 @@ import pepeSad from "../../../public/assets/images/pepe-sad.png";
 import arrow from "../../../public/assets/images/arrow.png";
 import dicapta from "../../../public/assets/images/logo-dicapta.png";
 import githubExplorer from "../../../public/assets/images/github-explorer.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useEffect } from "react";
 
 import Card from "../../components/Card/Card.jsx";
 
@@ -12,6 +15,10 @@ const skills = skillsJson.skills;
 import "./Home.scss";
 
 export function HomeView() {
+  useEffect(() => {
+    AOS.init();
+  }, []);
+
   return (
     <main className="home">
       <section className="home__banner">
@@ -70,7 +77,14 @@ export function HomeView() {
         <p className="skills__subtitle">I am really good at</p>
         <div className="skills__container">
           {skills.map((skill) => (
-            <div className="skills__skill" key={skill.id}>
+            <div
+              data-aos="zoom-in"
+              data-aos-duration={Math.floor(Math.random() * 1000) + 1000}
+              data-aos-delay={Math.floor(Math.random() * 1000) + 200}
+              data-aos-easing="ease-in-out"
+              className="skills__skill"
+              key={skill.id}
+            >
               <img className="skills__skill-image" src={skill.src} alt="" />
               <p className="skills__skill-name">{skill.name}</p>
             </div>
@@ -85,7 +99,13 @@ export function HomeView() {
           Some work and personal projects that I have done
         </p>
         <div className="portfolio__content-container">
-          <div className="portfolio__element-container portfolio__element-container--dicapta">
+          <div
+            data-aos="fade-down"
+            data-aos-easing="ease-in-out"
+            data-aos-duration={Math.floor(Math.random() * 1000) + 2000}
+            data-aos-delay={Math.floor(Math.random() * 1000) + 2000}
+            className="portfolio__element-container portfolio__element-container--dicapta"
+          >
             <Card
               img={dicapta}
               text="Website migration and development. Made with Vue.js, Vue Router and CMS integration."
@@ -93,7 +113,13 @@ export function HomeView() {
               link="https://dicapta.netlify.app/"
             />
           </div>
-          <div className="portfolio__element-container portfolio__element-container--morningstar">
+          <div
+            data-aos="fade-up-left"
+            data-aos-easing="ease-in-out"
+            data-aos-duration={Math.floor(Math.random() * 1000) + 2000}
+            data-aos-delay={Math.floor(Math.random() * 1000) + 2000}
+            className="portfolio__element-container portfolio__element-container--morningstar"
+          >
             <Card
               img="https://upload.wikimedia.org/wikipedia/commons/6/67/Morningstar_Logo.svg"
               text="Development of a large website. With Vue.js, CMS
@@ -101,7 +127,13 @@ export function HomeView() {
               link="https://indexes.morningstar.com/"
             />
           </div>
-          <div className="portfolio__element-container">
+          <div
+            data-aos="fade-up"
+            data-aos-easing="ease-in-out"
+            data-aos-duration={Math.floor(Math.random() * 1000) + 2000}
+            data-aos-delay={Math.floor(Math.random() * 1000) + 2000}
+            className="portfolio__element-container"
+          >
             <Card
               img="https://cdn.prod.website-files.com/605f2547102fdbbeff1b21e0/60eef7c33281b745d059ca69_proper.png"
               text="Development of a website and a Google Chrome extension. With Vue.js and CMS integration."
@@ -109,7 +141,13 @@ export function HomeView() {
               hideLinkText={true}
             />
           </div>
-          <div className="portfolio__element-container portfolio__element-container--github-explorer">
+          <div
+            data-aos="fade-up-right"
+            data-aos-easing="ease-in-out"
+            data-aos-duration={Math.floor(Math.random() * 1000) + 2000}
+            data-aos-delay={Math.floor(Math.random() * 1000) + 2000}
+            className="portfolio__element-container portfolio__element-container--github-explorer"
+          >
             <Card
               img={githubExplorer}
               text="Website development. Made with React.js, React Router and the GitHub REST API."

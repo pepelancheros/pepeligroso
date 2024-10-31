@@ -166,7 +166,7 @@
   max-width: $size-1280;
   margin: auto;
   padding: 0 $size-24;
-  margin-bottom: $size-96;
+  margin-bottom: $size-48;
 
   &__title {
     text-align: center;
@@ -417,6 +417,8 @@
   }
 
   .portfolio {
+    margin-bottom: $size-96;
+
     &__title {
       text-align: left;
       margin-bottom: 0;

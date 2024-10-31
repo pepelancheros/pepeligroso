@@ -13,12 +13,11 @@
 
   &__image {
     margin-top: $size-24;
-    margin-left: $size-24;
     overflow: hidden;
     z-index: 2;
     position: relative;
     max-height: 100px;
-    max-width: 300px;
+    max-width: 250px;
     transition: all 0.3s ease-in-out;
   }
 
@@ -37,18 +36,20 @@
   }
 
   &:hover {
-    .card__interactive-bg {
-      -webkit-transform: scale(10);
-      -ms-transform: scale(10);
-      transform: scale(10);
-    }
+    .card {
+      &__interactive-bg {
+        -webkit-transform: scale(10);
+        -ms-transform: scale(10);
+        transform: scale(10);
+      }
 
-    .card__text {
-      color: white;
-    }
+      &__text {
+        color: white;
+      }
 
-    .card__image {
-      transform: scale(1.05);
+      &__image {
+        transform: scale(1.05);
+      }
     }
   }
 
@@ -67,5 +68,15 @@
     -webkit-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
+  }
+}
+
+// styles for tablet size (768px) and higher
+@media all and (min-width: 48em) {
+  .card {
+    &__image {
+      margin-left: $size-24;
+      max-width: 300px;
+    }
   }
 }

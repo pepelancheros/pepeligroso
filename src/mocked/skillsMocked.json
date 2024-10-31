@@ -52,11 +52,16 @@
     },
     {
       "id": 11,
+      "name": "WEBPACK",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Cib-webpack_%28CoreUI_Icons_v1.0.0%29.svg"
+    },
+    {
+      "id": 12,
       "name": "CMS INTEGRATION",
       "src": "https://upload.wikimedia.org/wikipedia/commons/5/52/Community_Resources_Icons_Engine.svg"
     },
     {
-      "id": 12,
+      "id": 13,
       "name": "REST API",
       "src": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Noun_Project_cloud_download_icon_356352_cc.svg"
     }
