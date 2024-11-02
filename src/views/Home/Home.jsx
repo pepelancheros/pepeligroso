@@ -6,6 +6,7 @@ import githubExplorer from "../../../public/assets/images/github-explorer.png";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
+import useWindowDimensions from "../../utilities/useWindowDimensions.jsx";
 
 import Card from "../../components/Card/Card.jsx";
 
@@ -18,6 +19,8 @@ export function HomeView() {
   useEffect(() => {
     AOS.init();
   }, []);
+
+  const { width } = useWindowDimensions();
 
   return (
     <main className="home">
@@ -100,10 +103,10 @@ export function HomeView() {
         </p>
         <div className="portfolio__content-container">
           <div
-            data-aos="fade-down"
+            data-aos={width < 768 ? "fade-up" : "fade-down"}
             data-aos-easing="ease-in-out"
-            data-aos-duration={Math.floor(Math.random() * 1000) + 1200}
-            data-aos-delay={Math.floor(Math.random() * 1000) + 1200}
+            data-aos-duration={Math.floor(Math.random() * 1000) + 1000}
+            data-aos-delay={Math.floor(Math.random() * 1000) + 1000}
             className="portfolio__element-container portfolio__element-container--dicapta"
           >
             <Card
@@ -114,10 +117,10 @@ export function HomeView() {
             />
           </div>
           <div
-            data-aos="fade-up-left"
+            data-aos={width < 768 ? "fade-up" : "fade-up-left"}
             data-aos-easing="ease-in-out"
-            data-aos-duration={Math.floor(Math.random() * 1000) + 1200}
-            data-aos-delay={Math.floor(Math.random() * 1000) + 1200}
+            data-aos-duration={Math.floor(Math.random() * 1000) + 1000}
+            data-aos-delay={Math.floor(Math.random() * 1000) + 1000}
             className="portfolio__element-container portfolio__element-container--morningstar"
           >
             <Card
@@ -130,8 +133,8 @@ export function HomeView() {
           <div
             data-aos="fade-up"
             data-aos-easing="ease-in-out"
-            data-aos-duration={Math.floor(Math.random() * 1000) + 1200}
-            data-aos-delay={Math.floor(Math.random() * 1000) + 1200}
+            data-aos-duration={Math.floor(Math.random() * 1000) + 1000}
+            data-aos-delay={Math.floor(Math.random() * 1000) + 1000}
             className="portfolio__element-container"
           >
             <Card
@@ -142,10 +145,10 @@ export function HomeView() {
             />
           </div>
           <div
-            data-aos="fade-up-right"
+            data-aos={width < 768 ? "fade-up" : "fade-up-right"}
             data-aos-easing="ease-in-out"
-            data-aos-duration={Math.floor(Math.random() * 1000) + 1200}
-            data-aos-delay={Math.floor(Math.random() * 1000) + 1200}
+            data-aos-duration={Math.floor(Math.random() * 1000) + 1000}
+            data-aos-delay={Math.floor(Math.random() * 1000) + 1000}
             className="portfolio__element-container portfolio__element-container--github-explorer"
           >
             <Card
