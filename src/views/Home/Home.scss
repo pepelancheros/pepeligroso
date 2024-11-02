@@ -22,7 +22,6 @@
   &__banner-info-container {
     display: flex;
     flex-direction: column;
-    padding: 0 $size-32;
   }
 
   &__title-container {
@@ -338,6 +337,10 @@
 // styles for tablet size (768px) and higher
 @media all and (min-width: 48em) {
   .home {
+    &__banner-info-container {
+      padding: 0 $size-32;
+    }
+
     &__main-icon {
       margin: $size-48 auto 0;
       width: 350px;

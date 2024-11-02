@@ -20,7 +20,7 @@ export function HomeView() {
     AOS.init();
   }, []);
 
-  const { width } = useWindowDimensions();
+  const { pageWidth } = useWindowDimensions();
 
   return (
     <main className="home">
@@ -103,7 +103,7 @@ export function HomeView() {
         </p>
         <div className="portfolio__content-container">
           <div
-            data-aos={width < 768 ? "fade-up" : "fade-down"}
+            data-aos={pageWidth < 768 ? "fade-up" : "fade-down"}
             data-aos-easing="ease-in-out"
             data-aos-duration={Math.floor(Math.random() * 1000) + 1000}
             data-aos-delay={Math.floor(Math.random() * 1000) + 1000}
@@ -117,7 +117,7 @@ export function HomeView() {
             />
           </div>
           <div
-            data-aos={width < 768 ? "fade-up" : "fade-up-left"}
+            data-aos={pageWidth < 768 ? "fade-up" : "fade-up-left"}
             data-aos-easing="ease-in-out"
             data-aos-duration={Math.floor(Math.random() * 1000) + 1000}
             data-aos-delay={Math.floor(Math.random() * 1000) + 1000}
@@ -145,7 +145,7 @@ export function HomeView() {
             />
           </div>
           <div
-            data-aos={width < 768 ? "fade-up" : "fade-up-right"}
+            data-aos={pageWidth < 768 ? "fade-up" : "fade-up-right"}
             data-aos-easing="ease-in-out"
             data-aos-duration={Math.floor(Math.random() * 1000) + 1000}
             data-aos-delay={Math.floor(Math.random() * 1000) + 1000}
