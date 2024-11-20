@@ -1,0 +1,37 @@
+@use "/src/assets/variables" as *;
+
+.icon {
+  width: 250px;
+  height: auto;
+  display: block;
+  margin: $size-48 auto 0;
+
+  &__container {
+    position: relative;
+    width: 350px;
+    margin: auto;
+  }
+
+  &__eye {
+    position: absolute;
+    width: 31px;
+
+    &--left {
+      top: 182px;
+      left: 125px;
+    }
+
+    &--right {
+      top: 182px;
+      right: 125px;
+    }
+  }
+}
+
+// styles for tablet size (768px) and higher
+@media all and (min-width: 48em) {
+  .icon {
+    margin: $size-48 auto 0;
+    width: 350px;
+  }
+}

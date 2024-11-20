@@ -12,13 +12,6 @@
     justify-content: space-between;
   }
 
-  &__main-icon {
-    width: 250px;
-    height: auto;
-    display: block;
-    margin: $size-48 auto 0;
-  }
-
   &__banner-info-container {
     display: flex;
     flex-direction: column;
@@ -341,10 +334,6 @@
       padding: 0 $size-32;
     }
 
-    &__main-icon {
-      margin: $size-48 auto 0;
-      width: 350px;
-    }
     &__creative-text {
       font-size: $size-48;
     }

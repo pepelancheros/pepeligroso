@@ -1,4 +1,3 @@
-import avatar from "../../../public/assets/images/avatars.svg";
 import pepeSad from "../../../public/assets/images/pepe-sad.png";
 import arrow from "../../../public/assets/images/arrow.png";
 import dicapta from "../../../public/assets/images/logo-dicapta.png";
@@ -7,6 +6,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
 import useWindowDimensions from "../../utilities/useWindowDimensions.jsx";
+import Icon from "../../components/Icon/Icon.jsx";
 
 import Card from "../../components/Card/Card.jsx";
 
@@ -25,11 +25,7 @@ export function HomeView() {
   return (
     <main className="home">
       <section className="home__banner">
-        <img
-          className="home__main-icon"
-          src={avatar}
-          alt="icon of a bald person with beard and a hoodie"
-        />
+        <Icon />
         <div className="home__banner-info-container">
           <div className="home__title-container">
             <span className="tusker-font home__creative-text">creative</span>
@@ -83,7 +79,7 @@ export function HomeView() {
             <div
               data-aos="zoom-in"
               data-aos-duration={Math.floor(Math.random() * 1000) + 1000}
-              data-aos-delay={Math.floor(Math.random() * 1000) + 200}
+              data-aos-delay={Math.floor(Math.random() * 1000) + 100}
               data-aos-easing="ease-in-out"
               className="skills__skill"
               key={skill.id}
