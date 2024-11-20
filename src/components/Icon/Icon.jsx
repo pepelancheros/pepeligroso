@@ -1,4 +1,4 @@
-import "./icon.scss";
+import "./Icon.scss";
 import { useEffect } from "react";
 
 import avatar from "../../../public/assets/images/avatars.svg";
