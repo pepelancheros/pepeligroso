@@ -1,0 +1,46 @@
+@use "/src/assets/variables" as *;
+
+.typed-text {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 117px;
+}
+
+.input-cursor {
+  display: inline-block;
+  width: 2px;
+  height: $size-96;
+  background-color: $color-black-500;
+  margin-left: 8px;
+  animation: blink 0.6s linear infinite alternate;
+}
+
+.sentence {
+  font-size: $size-48;
+  font-weight: 400;
+  width: fit-content;
+  text-transform: uppercase;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+// styles for tablet size (768px) and higher
+@media all and (min-width: 48em) {
+  .sentence {
+    font-size: $size-96;
+  }
+}

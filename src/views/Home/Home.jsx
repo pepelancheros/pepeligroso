@@ -7,6 +7,7 @@ import "aos/dist/aos.css";
 import { useEffect } from "react";
 import useWindowDimensions from "../../utilities/useWindowDimensions.jsx";
 import Icon from "../../components/Icon/Icon.jsx";
+import TypedText from "../../components/TypedText/TypedText.jsx";
 
 import Card from "../../components/Card/Card.jsx";
 
@@ -29,7 +30,8 @@ export function HomeView() {
         <div className="home__banner-info-container">
           <div className="home__title-container">
             <span className="tusker-font home__creative-text">creative</span>
-            <h1 className="home__title red-text">FRONTEND DEVELOPER</h1>
+            <TypedText />
+            {/* <h1 className="home__title red-text">FRONTEND DEVELOPER</h1> */}
           </div>
           <p className="home__description">
             based in Colombia with more than 5 years of experience building
