@@ -25,25 +25,31 @@ export default function TypedText() {
   }, [textArray]);
 
   function typeSentence(sentence, elementId = "sentence", delay = 100) {
-    document.getElementById(elementId).innerHTML = "";
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    el.innerHTML = "";
     const letters = sentence.split("");
 
     letters.forEach((letter, index) => {
       setTimeout(() => {
-        document.getElementById(elementId).innerHTML += letter;
+        const el = document.getElementById(elementId);
+        if (el) el.innerHTML += letter;
       }, index * delay);
     });
   }
 
   function deleteSentence(elementId) {
     const delay = 100;
-    const sentence = document.getElementById(elementId).innerHTML;
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    const sentence = el.innerHTML;
     const letters = sentence.split("");
 
     letters.forEach((letter, index) => {
       setTimeout(() => {
         letters.pop();
-        document.getElementById(elementId).innerHTML = letters.join("");
+        const el = document.getElementById(elementId);
+        if (el) el.innerHTML = letters.join("");
       }, index * delay);
     });
   }
