@@ -49,12 +49,14 @@ export function HomeView() {
         <h2 className="tusker-font home__subtitle">HELLO, I'M PEPE</h2>
         <div className="about__description-container">
           <p className="about__description">
-            Actually, my name is Sebastian, but friends call me Pepe, please
-            call me Pepe. I've always been a person that likes to create. This
-            has let me involve in different things in life, like studying
+            Actually, my name is Sebastian, but everyone calls me Pepe.  I've always liked to create and this
+            has let me involve in different things in life. Like studying
             electronics engineering, photography and becoming a self taught
-            frontend developer. Welcome to my site, I use my passion and skills
-            to create so I hope you find something interesting in this journey.
+            developer.
+            <br />
+            <br />
+            I use my passion and skills
+            to create, and I also like feedback. So, please let me know if you find anything that could use some work. Welcome to my site :)
           </p>
           <div className="about__images-container">
             <div>
