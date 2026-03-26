@@ -6,12 +6,47 @@
   background-color: $color-beige-500;
   z-index: 100;
   width: 100%;
-
-  h2 {
-    margin: 0;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
 
   &__title {
+    font-size: $size-24;
     font-weight: 500;
+    color: $color-black-500;
+    font-family: 'Montserrat', sans-serif;
+    text-decoration: none;
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: $size-12;
+  }
+
+  &__separator {
+    font-family: TuskerGrotesk;
+    font-size: $size-16;
+  }
+
+  &__link {
+    font-family: TuskerGrotesk;
+    font-size: $size-16;
+    color: $color-black-500;
+    text-decoration: none;
+    padding: $size-4 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+    letter-spacing: 0.05em;
+
+    &:hover {
+      color: $color-red-500;
+    }
+
+    &--active {
+      color: $color-red-500;
+      border-bottom-color: $color-red-500;
+    }
   }
 }
