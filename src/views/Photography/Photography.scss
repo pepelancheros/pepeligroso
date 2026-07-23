@@ -1,209 +1,361 @@
 @use "sass:color";
 @use "/src/assets/variables" as *;
 
+// Fixed cinematic dark theme for /photography — not a togglable site theme,
+// just this section's look (see handoff/photography-portfolio/README.md).
+$photo-bg: #0a0a0a;
+$photo-text: $color-beige-500;
+$photo-muted: rgba(239, 229, 223, 0.6);
+$photo-border: rgba(239, 229, 223, 0.12);
+$photo-film-bg: rgba(10, 10, 10, 0.95);
+$photo-lightbox-bg: rgba(4, 4, 4, 0.97);
+
+$font-display: "TuskerGrotesk", sans-serif;
+$font-body: "Montserrat", sans-serif;
+$font-mono: "Space Mono", monospace;
+$font-serif: "Cormorant Garamond", serif;
+
 .photography {
   padding-top: pxToRem(80px);
+  background-color: $photo-bg;
+  color: $photo-text;
+  min-height: calc(100vh - #{pxToRem(80px)});
 
   // ── Hero ──────────────────────────────────────────────────────────
   &__hero {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     text-align: center;
-    padding: $size-96 $size-32 $size-64;
-    min-height: 50vh;
-    position: relative;
-    overflow: hidden;
-
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(
-        ellipse at center,
-        rgba($color-red-500, 0.06) 0%,
-        transparent 70%
-      );
-      pointer-events: none;
-    }
+    max-width: pxToRem(900px);
+    margin: 0 auto;
+    padding: $size-96 $size-32 $size-48;
   }
 
   &__hero-eyebrow {
-    font-family: "Space Mono", monospace;
-    font-size: pxToRem(13px);
-    letter-spacing: 0.2em;
+    font-family: $font-mono;
+    font-weight: 700;
+    font-size: pxToRem(14px);
+    letter-spacing: 4px;
     text-transform: uppercase;
     color: $color-red-500;
     margin: 0 0 $size-16 0;
   }
 
   &__hero-title {
-    font-size: clamp(pxToRem(56px), 10vw, pxToRem(120px));
+    font-family: $font-display;
+    font-weight: 700;
+    font-size: clamp(pxToRem(40px), 7vw, pxToRem(88px));
+    letter-spacing: 1px;
+    line-height: 1;
     margin: 0 0 $size-24 0;
-    line-height: 0.9;
-    letter-spacing: -0.02em;
+    color: $photo-text;
   }
 
   &__hero-description {
-    max-width: pxToRem(480px);
-    font-size: pxToRem(15px);
-    line-height: 1.7;
-    color: $color-gray-800;
+    font-family: $font-body;
+    font-style: italic;
+    font-weight: 400;
+    font-size: pxToRem(18px);
+    line-height: 1.6;
+    color: $photo-muted;
     margin: 0;
   }
 
-  // ── Category filters ───────────────────────────────────────────────
-  &__categories {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $size-8;
-    justify-content: center;
-    padding: 0 $size-32 $size-48;
-  }
-
-  &__category-btn {
-    background: none;
-    border: 1px solid rgba($color-black-500, 0.3);
-    border-radius: pxToRem(2px);
-    padding: $size-8 $size-16;
-    font-family: TuskerGrotesk;
-    font-size: pxToRem(14px);
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    color: $color-black-500;
-    transition: all 0.2s ease;
-
-    &:hover {
-      border-color: $color-red-500;
-      color: $color-red-500;
-    }
-
-    &--active {
-      background-color: $color-red-500;
-      border-color: $color-red-500;
-      color: white;
-    }
-  }
-
-  // ── Gallery ────────────────────────────────────────────────────────
-  &__gallery {
-    columns: 3;
-    column-gap: $size-12;
-    padding: 0 $size-32 $size-96;
-    max-width: pxToRem(1280px);
+  // ── Country grid (masonry) ──────────────────────────────────────────
+  // CSS multi-column layout, not CSS Grid: each tile's height comes from its
+  // own cover photo's aspect-ratio (see coverAspect in Photography.jsx)
+  // instead of a fixed row height, so the mosaic reads as photo-driven.
+  &__grid {
+    column-count: 3;
+    column-gap: $size-16;
+    max-width: pxToRem(1400px);
     margin: 0 auto;
+    padding: 0 $size-48 $size-96;
 
     @media (max-width: 900px) {
-      columns: 2;
+      column-count: 2;
     }
 
     @media (max-width: 560px) {
-      columns: 1;
-      padding: 0 $size-16 $size-64;
+      column-count: 1;
     }
   }
 
-  &__gallery-item {
-    break-inside: avoid;
-    margin-bottom: $size-12;
+  &__tile {
     position: relative;
     overflow: hidden;
     cursor: pointer;
-
-    &:hover .photography__gallery-overlay {
-      opacity: 1;
-    }
-
-    &:hover img {
-      transform: scale(1.04);
-    }
+    break-inside: avoid;
+    margin-bottom: $size-16;
   }
 
-  &__gallery-img {
-    display: block;
-    width: 100%;
-    height: auto;
-    transition: transform 0.4s ease;
-    background-color: $color-gray-200;
-  }
-
-  &__gallery-overlay {
+  &__tile-img {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba($color-black-500, 0.75) 0%,
-      transparent 60%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  &__tile:hover &__tile-img {
+    transform: scale(1.08);
+  }
+
+  &__tile-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0) 55%);
+    display: flex;
+    align-items: flex-end;
+    padding: $size-24;
+    pointer-events: none;
+  }
+
+  &__tile-text {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    padding: $size-16;
   }
 
-  &__gallery-caption {
-    color: white;
-    font-size: pxToRem(13px);
-    line-height: 1.4;
-    margin: 0;
-  }
-
-  &__gallery-location {
-    color: rgba(white, 0.7);
-    font-size: pxToRem(11px);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin: $size-4 0 0 0;
-  }
-
-  // ── About section ──────────────────────────────────────────────────
-  &__about {
-    background-color: $color-black-500;
-    color: $color-beige-500;
-    padding: $size-96 $size-32;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: $size-24;
-  }
-
-  &__about-title {
-    font-size: clamp(pxToRem(40px), 6vw, pxToRem(72px));
-    margin: 0;
+  &__tile-name {
+    font-family: $font-serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: pxToRem(64px);
+    color: #f5f3ef;
+    margin: 0 0 $size-8 0;
     line-height: 1;
   }
 
-  &__about-text {
-    max-width: pxToRem(580px);
-    font-size: pxToRem(15px);
-    line-height: 1.8;
-    color: rgba($color-beige-500, 0.8);
-    margin: 0;
+  &__tile-cta {
+    font-family: $font-mono;
+    font-weight: 700;
+    font-size: pxToRem(10px);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $color-red-500;
   }
 
-  &__about-tags {
+  // ── Country gallery ──────────────────────────────────────────────────
+  &__gallery {
     display: flex;
-    flex-wrap: wrap;
-    gap: $size-8;
-    justify-content: center;
-    margin-top: $size-8;
+    flex-direction: column;
+    min-height: calc(100vh - #{pxToRem(80px)});
   }
 
-  &__about-tag {
-    border: 1px solid rgba($color-beige-500, 0.3);
-    padding: $size-8 $size-16;
-    font-family: TuskerGrotesk;
+  &__gallery-topbar {
+    padding: $size-24 $size-48 0;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-8;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: $font-display;
+    font-weight: 600;
     font-size: pxToRem(13px);
-    letter-spacing: 0.1em;
-    color: rgba($color-beige-500, 0.7);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $photo-muted;
+    padding: 0;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $photo-text;
+    }
+  }
+
+  &__gallery-title {
+    font-family: $font-serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(pxToRem(56px), 6vw, pxToRem(150px));
+    letter-spacing: 1px;
+    line-height: 1;
+    text-align: center;
+    padding: $size-32 $size-48 $size-48;
+  }
+
+  &__filmstrip {
+    display: flex;
+    align-items: flex-end;
+    gap: pxToRem(14px);
+    overflow-x: auto;
+    padding: 0 $size-48 $size-32;
+    margin-top: auto;
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // old Edge/IE
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome, Safari
+    }
+
+    &-item {
+      position: relative;
+      flex-shrink: 0;
+      cursor: pointer;
+      overflow: hidden;
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  &__thumbrow {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    background: $photo-film-bg;
+    border-top: 1px solid $photo-border;
+    padding: $size-12 $size-48;
+    display: flex;
+    gap: $size-8;
+    overflow-x: auto;
+
+    &--lightbox {
+      position: static;
+      background: transparent;
+      padding: $size-16 pxToRem(100px) $size-32;
+
+      @media (max-width: 700px) {
+        padding: $size-16 $size-16 $size-32;
+      }
+
+      .photography__thumb {
+        width: 56px;
+        height: 56px;
+      }
+    }
+  }
+
+  &__thumb {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &:hover,
+    &--active {
+      opacity: 1;
+    }
+  }
+
+  // ── Lightbox ──────────────────────────────────────────────────────────
+  &__lightbox {
+    position: fixed;
+    inset: 0;
+    background: $photo-lightbox-bg;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  &__lightbox-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  &__lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 32px;
+    background: none;
+    border: none;
+    color: $photo-text;
+    font-size: pxToRem(32px);
+    cursor: pointer;
+    line-height: 1;
+    z-index: 5;
+  }
+
+  &__lightbox-stage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: $size-32 pxToRem(100px);
+
+    @media (max-width: 700px) {
+      padding: $size-24 $size-16;
+    }
+  }
+
+  &__lightbox-nav {
+    position: absolute;
+    background: none;
+    border: none;
+    color: $photo-text;
+    font-size: pxToRem(40px);
+    cursor: pointer;
+    line-height: 1;
+
+    &--prev {
+      left: 24px;
+    }
+
+    &--next {
+      right: 24px;
+    }
+  }
+
+  &__lightbox-frame {
+    position: relative;
+    height: 72vh;
+    max-width: 80vw;
+
+    @media (max-width: 700px) {
+      height: 45vh;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__lightbox-info {
+    font-family: $font-mono;
+    font-size: pxToRem(13px);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: center;
+    color: $photo-muted;
+    padding: 0 pxToRem(100px) $size-16;
+
+    @media (max-width: 700px) {
+      padding: 0 $size-16 $size-16;
+    }
   }
 
   // ── Contact ────────────────────────────────────────────────────────
   &__contact {
+    background-color: $photo-bg;
+    color: $photo-text;
     padding: $size-96 $size-32;
     text-align: center;
     display: flex;
@@ -213,13 +365,15 @@
   }
 
   &__contact-title {
+    font-family: $font-display;
     font-size: clamp(pxToRem(40px), 6vw, pxToRem(72px));
     margin: 0;
   }
 
   &__contact-text {
+    font-family: $font-body;
     font-size: pxToRem(15px);
-    color: $color-gray-800;
+    color: $photo-muted;
     margin: 0;
     max-width: pxToRem(440px);
     line-height: 1.7;
@@ -230,7 +384,7 @@
     padding: $size-16 $size-32;
     background-color: $color-red-500;
     color: white;
-    font-family: TuskerGrotesk;
+    font-family: $font-display;
     font-size: pxToRem(18px);
     letter-spacing: 0.05em;
     text-decoration: none;

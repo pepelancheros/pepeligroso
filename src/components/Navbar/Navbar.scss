@@ -49,4 +49,26 @@
       border-bottom-color: $color-red-500;
     }
   }
+
+  // Dark variant for /photography — cinematic black header instead of the
+  // site's default beige, per that section's fixed dark theme.
+  &--dark {
+    background-color: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(239, 229, 223, 0.12);
+
+    .navbar__title,
+    .navbar__link {
+      color: $color-beige-500;
+    }
+
+    .navbar__link:hover {
+      color: $color-red-500;
+    }
+
+    .navbar__link--active {
+      color: $color-red-500;
+      border-bottom-color: $color-red-500;
+    }
+  }
 }

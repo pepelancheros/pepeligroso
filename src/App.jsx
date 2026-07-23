@@ -12,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomeView />} />
         <Route path="/photography" element={<PhotographyView />} />
+        <Route path="/photography/:slug" element={<PhotographyView />} />
       </Routes>
     </div>
   );
