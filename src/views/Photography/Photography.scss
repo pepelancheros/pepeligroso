@@ -75,6 +75,7 @@ $font-serif: "Cormorant Garamond", serif;
 
     @media (max-width: 900px) {
       column-count: 2;
+      padding: 0 $size-16 $size-16;
     }
 
     @media (max-width: 560px) {
@@ -299,7 +300,9 @@ $font-serif: "Cormorant Garamond", serif;
     padding: $size-32 pxToRem(100px);
 
     @media (max-width: 700px) {
-      padding: $size-24 $size-16;
+      // No side arrows on mobile (nav is the thumbnail carousel below), so
+      // the frame can use the width they used to sit in.
+      padding: $size-16;
     }
   }
 
@@ -327,7 +330,8 @@ $font-serif: "Cormorant Garamond", serif;
     max-width: 80vw;
 
     @media (max-width: 700px) {
-      height: 45vh;
+      height: 60vh;
+      max-width: 100%;
     }
 
     img {
