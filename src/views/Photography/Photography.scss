@@ -345,6 +345,25 @@ $font-serif: "Cormorant Garamond", serif;
     }
   }
 
+  &__lightbox-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: pxToRem(36px);
+    height: pxToRem(36px);
+    margin: pxToRem(-18px) 0 0 pxToRem(-18px);
+    border: 3px solid $photo-border;
+    border-top-color: $photo-text;
+    border-radius: 50%;
+    animation: photography-spin 0.8s linear infinite;
+  }
+
+  @keyframes photography-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   &__lightbox-info {
     font-family: $font-mono;
     font-size: pxToRem(13px);

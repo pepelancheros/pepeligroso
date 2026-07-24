@@ -110,6 +110,11 @@ export function PhotographyView() {
   const navigate = useNavigate();
   const { pageWidth } = useWindowDimensions();
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  // The <img> keeps showing its previous bitmap until the new src finishes
+  // loading, which reads as "the swipe/click did nothing". This tracks
+  // whether the current lightbox photo has finished loading so we can show
+  // a loader over the stale image instead.
+  const [photoLoading, setPhotoLoading] = useState(true);
 
   // On mobile there's no separate filmstrip page — a country opens straight
   // into the lightbox, which doubles as the whole gallery experience there.
@@ -152,6 +157,10 @@ export function PhotographyView() {
       else prevPhoto();
     }
   };
+
+  useEffect(() => {
+    setPhotoLoading(true);
+  }, [lightboxIndex]);
 
   useEffect(() => {
     // Deep link to an unknown country slug — fall back to the grid instead
@@ -293,7 +302,14 @@ export function PhotographyView() {
                     </button>
                   )}
                   <div className="photography__lightbox-frame">
-                    <img src={lightboxPhoto.src} alt={lightboxPhoto.location} />
+                    <img
+                      src={lightboxPhoto.src}
+                      alt={lightboxPhoto.location}
+                      onLoad={() => setPhotoLoading(false)}
+                    />
+                    {photoLoading && (
+                      <div className="photography__lightbox-loader" aria-hidden="true" />
+                    )}
                   </div>
                   {!isMobile && (
                     <button
