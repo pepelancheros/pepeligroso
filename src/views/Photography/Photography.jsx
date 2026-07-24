@@ -292,10 +292,7 @@ export function PhotographyView() {
                       ‹
                     </button>
                   )}
-                  <div
-                    className="photography__lightbox-frame"
-                    style={{ aspectRatio: lightboxPhoto.aspect }}
-                  >
+                  <div className="photography__lightbox-frame">
                     <img src={lightboxPhoto.src} alt={lightboxPhoto.location} />
                   </div>
                   {!isMobile && (
