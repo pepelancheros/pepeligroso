@@ -34,7 +34,7 @@ export function HomeView() {
             {/* <h1 className="home__title red-text">FRONTEND DEVELOPER</h1> */}
           </div>
           <p className="home__description">
-            based in Colombia with more than 5 years of experience building
+            based in Colombia with more than 7 years of experience building
             pixel-perfect, accessible and user friendly websites.
           </p>
           <a
