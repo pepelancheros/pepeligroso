@@ -3,60 +3,48 @@ import { useNavigate, useParams } from "react-router-dom";
 import useWindowDimensions from "../../utilities/useWindowDimensions.jsx";
 import "./Photography.scss";
 
-// Country + photo data — placeholders (Lorem Picsum) until real photos are
-// supplied per country. Structure (heights/aspects/camera/date cycles)
-// mirrors the Claude Design reference so swapping in real `src` values later
-// is a drop-in replacement.
-// Content only — no layout info here. Adding a country just means adding a
-// row; the grid (CSS columns, see Photography.scss) sizes each tile to its
-// own cover photo's aspect ratio automatically.
-//
-// `photoUrls` is optional, temporary bootstrapping: while photos are added
-// to Cloudinary one country at a time by hand, list the real URLs here for
-// that country. Once tag-based listing is wired up, this goes away and every
-// country's photos come from Cloudinary directly — no code changes needed.
-const AUSTRIA_PHOTO_URLS = [
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838673/16-DSC04892_lipizf.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838673/15-DSC04893_q1or6k.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838672/14-DSC04897_owynj2.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838671/11-DSC05007_kkxqhv.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838672/12-DSC05000_wgwf9n.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838670/9-DSC05014_oqqhoz.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838670/10-DSC05010_wau4dx.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838670/8-DSC05019_tayrb2.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838668/6-DSC05033_gxh49g.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838668/5-DSC05037_fmzppp.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838668/7-DSC05031_ouo4t8.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838667/4-DSC05046_wj58q8.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838667/3-DSC05048_imj39w.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838667/2-DSC05074_tdpgjl.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784838667/1-DSC05077_idqazj.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784837702/DSC05061_2_jrtjht.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784837700/DSC05057_1_p0uxmg.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784837699/DSC05005_3_b306u0.jpg",
-  "https://res.cloudinary.com/dsiqjkgaw/image/upload/v1784837698/DSC04888_3_df71bv.jpg",
-];
-
+// Content only — no layout or photo info here. Photos come from Cloudinary
+// at runtime, tagged with the country's slug (see fetchTaggedPhotos below).
+// Adding a country still means adding a row here (Cloudinary has no public,
+// unsigned way to say "list every tag that exists" — only "list resources
+// for this known tag" — so we can't auto-discover new slugs without a
+// backend). Once a slug is listed here, tagging its photos is enough to make
+// it appear; a country with nothing tagged yet is simply skipped.
 const COUNTRY_DEFS = [
-  { name: "Ecuador", city: "Quito", slug: "ecuador" },
-  { name: "Colombia", city: "Bogotá", slug: "colombia" },
-  { name: "Austria", city: "Vienna", slug: "austria", photoUrls: AUSTRIA_PHOTO_URLS },
-  { name: "Bolivia", city: "La Paz", slug: "bolivia" },
-  { name: "Italia", city: "Roma", slug: "italia" },
-  { name: "México", city: "Ciudad de México", slug: "mexico" },
+  { name: "Austria", city: "Vienna", slug: "austria" },
+  { name: "Hungary", city: "Budapest", slug: "hungary" },
 ];
-const PHOTOS_PER_COUNTRY = 20;
 const HEIGHTS = [500, 380, 480, 340, 490, 400, 460, 320];
-const ASPECTS = ["3/4", "4/5", "1/1", "5/4", "4/3"];
 const CAMERAS = ["Sony A7 III", "Fujifilm X100V", "Canon EOS R6", "DJI Mavic 3"];
 const YEARS = [2021, 2022, 2023, 2024];
 
-// Inserts a Cloudinary transformation (format/quality/width) into a delivery
-// URL. No-op for non-Cloudinary URLs (e.g. the Picsum placeholders), so a
-// country can mix real and mock photos safely.
-function cloudinaryUrl(url, transform) {
-  if (!url.includes("res.cloudinary.com")) return url;
-  return url.replace("/image/upload/", `/image/upload/${transform}/`);
+const CLOUDINARY_CLOUD_NAME = "dsiqjkgaw";
+
+// Builds a Cloudinary delivery URL with a transformation from a resource
+// returned by the tag-list API below.
+function cloudinaryDeliveryUrl(resource, transform) {
+  const { public_id: publicId, format, version } = resource;
+  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${transform}/v${version}/${publicId}.${format}`;
+}
+
+// Lists every image tagged `tag` via Cloudinary's unsigned "resource list by
+// tag" endpoint. Requires that setting to be turned on in the Cloudinary
+// account (Settings → Security → Resource list) and photos to be tagged
+// with the country's slug — until then, or for a country with nothing
+// tagged, this returns [] and the caller falls back to mock photos.
+async function fetchTaggedPhotos(tag) {
+  try {
+    const res = await fetch(
+      `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/list/${tag}.json`
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.resources || []).sort((a, b) =>
+      a.created_at.localeCompare(b.created_at)
+    );
+  } catch {
+    return [];
+  }
 }
 
 function shuffle(array) {
@@ -68,47 +56,63 @@ function shuffle(array) {
   return result;
 }
 
-function buildCountries() {
-  const withPhotos = COUNTRY_DEFS.map((c, ci) => {
-    const urls =
-      c.photoUrls ??
-      Array.from(
-        { length: PHOTOS_PER_COUNTRY },
-        (_, i) => `https://picsum.photos/seed/${c.slug}${i}/900/1200`
-      );
-    const photos = urls.map((url, i) => ({
-      id: i,
-      height: HEIGHTS[i % HEIGHTS.length],
-      aspect: ASPECTS[i % ASPECTS.length],
-      location: `${c.city}, ${c.name}`,
-      date: YEARS[(i + ci) % YEARS.length],
-      camera: CAMERAS[(i + ci) % CAMERAS.length],
-      // Small variant for the grid cover, filmstrip and thumbnails — those
-      // never render wider than a few hundred px. Full variant only for the
-      // lightbox, the one place photos are shown large.
-      thumbSrc: cloudinaryUrl(url, "f_auto,q_auto,w_700"),
-      src: cloudinaryUrl(url, "f_auto,q_auto,w_1600"),
-    }));
-    return {
-      ...c,
-      // Real cover aspect ratio — the CSS column layout sizes each tile to
-      // this, so the mosaic reads as photo-driven rather than grid-driven.
-      coverAspect: ASPECTS[Math.floor(Math.random() * ASPECTS.length)],
-      photoCount: photos.length,
-      coverSrc: photos[0].thumbSrc,
-      photos,
-    };
-  });
-  // Reshuffle tile order on every page load so the mosaic re-flows.
-  return shuffle(withPhotos);
+function buildRealPhotos(resources, c, ci) {
+  return resources.map((r, i) => ({
+    id: r.public_id,
+    // Real aspect ratio from Cloudinary — the filmstrip/grid size each tile
+    // to this, so the layout is genuinely photo-driven, not just labeled so.
+    aspect: `${r.width}/${r.height}`,
+    height: HEIGHTS[i % HEIGHTS.length],
+    location: `${c.city}, ${c.name}`,
+    date: YEARS[(i + ci) % YEARS.length],
+    camera: CAMERAS[(i + ci) % CAMERAS.length],
+    thumbSrc: cloudinaryDeliveryUrl(r, "f_auto,q_auto,w_700"),
+    src: cloudinaryDeliveryUrl(r, "f_auto,q_auto,w_1600"),
+  }));
 }
 
-const COUNTRIES = buildCountries();
+async function buildCountries() {
+  const withPhotos = await Promise.all(
+    COUNTRY_DEFS.map(async (c, ci) => {
+      const resources = await fetchTaggedPhotos(c.slug);
+      if (!resources.length) return null;
+      const photos = buildRealPhotos(resources, c, ci);
+      return {
+        ...c,
+        coverAspect: photos[0].aspect,
+        photoCount: photos.length,
+        coverSrc: photos[0].thumbSrc,
+        photos,
+      };
+    })
+  );
+  // Reshuffle tile order on every page load so the mosaic re-flows.
+  return shuffle(withPhotos.filter(Boolean));
+}
+
+// Fetches + builds the country/photo list once per page load (not once per
+// component mount — Fast Refresh aside, this component only mounts once).
+function useCountries() {
+  const [countries, setCountries] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    buildCountries().then((result) => {
+      if (!cancelled) setCountries(result);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return countries;
+}
 
 export function PhotographyView() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { pageWidth } = useWindowDimensions();
+  const countries = useCountries();
   const [lightboxIndex, setLightboxIndex] = useState(null);
   // The <img> keeps showing its previous bitmap until the new src finishes
   // loading, which reads as "the swipe/click did nothing". This tracks
@@ -121,7 +125,8 @@ export function PhotographyView() {
   const isMobile = pageWidth < 700;
 
   const view = slug ? "gallery" : "grid";
-  const country = slug ? COUNTRIES.find((c) => c.slug === slug) || null : null;
+  const country =
+    slug && countries ? countries.find((c) => c.slug === slug) || null : null;
   const lightboxOpen = !!country && lightboxIndex !== null;
   const lightboxPhoto = lightboxOpen ? country.photos[lightboxIndex] : null;
 
@@ -163,10 +168,24 @@ export function PhotographyView() {
   }, [lightboxIndex]);
 
   useEffect(() => {
+    // Warm the browser cache for the next/previous photo so swiping feels
+    // instant instead of starting the download only once it's requested.
+    if (!lightboxOpen || !country) return;
+    const total = country.photos.length;
+    [(lightboxIndex + 1) % total, (lightboxIndex - 1 + total) % total].forEach(
+      (idx) => {
+        const img = new Image();
+        img.src = country.photos[idx].src;
+      }
+    );
+  }, [lightboxOpen, country, lightboxIndex]);
+
+  useEffect(() => {
     // Deep link to an unknown country slug — fall back to the grid instead
-    // of rendering an empty gallery.
-    if (slug && !country) navigate("/photography", { replace: true });
-  }, [slug, country, navigate]);
+    // of rendering an empty gallery. Wait for countries to finish loading
+    // first, otherwise every direct link would bounce before data arrives.
+    if (slug && countries && !country) navigate("/photography", { replace: true });
+  }, [slug, countries, country, navigate]);
 
   useEffect(() => {
     setLightboxIndex(isMobile && slug ? 0 : null);
@@ -204,29 +223,33 @@ export function PhotographyView() {
             </p>
           </section>
 
-          <div className="photography__grid">
-            {COUNTRIES.map((c) => (
-              <div
-                key={c.slug}
-                className="photography__tile"
-                style={{ aspectRatio: c.coverAspect }}
-                onClick={() => openCountry(c.slug)}
-              >
-                <img
-                  className="photography__tile-img"
-                  src={c.coverSrc}
-                  alt={c.name}
-                  loading="lazy"
-                />
-                <div className="photography__tile-overlay">
-                  <div className="photography__tile-text">
-                    <div className="photography__tile-name">{c.name}</div>
-                    <div className="photography__tile-cta">See Project →</div>
+          {countries ? (
+            <div className="photography__grid">
+              {countries.map((c) => (
+                <div
+                  key={c.slug}
+                  className="photography__tile"
+                  style={{ aspectRatio: c.coverAspect }}
+                  onClick={() => openCountry(c.slug)}
+                >
+                  <img
+                    className="photography__tile-img"
+                    src={c.coverSrc}
+                    alt={c.name}
+                    loading="lazy"
+                  />
+                  <div className="photography__tile-overlay">
+                    <div className="photography__tile-text">
+                      <div className="photography__tile-name">{c.name}</div>
+                      <div className="photography__tile-cta">See Project →</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="photography__loader" aria-hidden="true" />
+          )}
 
           <section className="photography__contact">
             <h2 className="photography__contact-title">
@@ -302,7 +325,17 @@ export function PhotographyView() {
                     </button>
                   )}
                   <div className="photography__lightbox-frame">
+                    {photoLoading && (
+                      <img
+                        key={`thumb-${lightboxPhoto.id}`}
+                        className="photography__lightbox-frame-thumb"
+                        src={lightboxPhoto.thumbSrc}
+                        alt=""
+                        aria-hidden="true"
+                      />
+                    )}
                     <img
+                      key={`full-${lightboxPhoto.id}`}
                       src={lightboxPhoto.src}
                       alt={lightboxPhoto.location}
                       onLoad={() => setPhotoLoading(false)}
