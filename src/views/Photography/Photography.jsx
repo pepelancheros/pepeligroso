@@ -3,20 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import useWindowDimensions from "../../utilities/useWindowDimensions.jsx";
 import "./Photography.scss";
 
-// Content only — no layout or photo info here. Photos come from Cloudinary
-// at runtime, tagged with the country's slug (see fetchTaggedPhotos below).
-// Adding a country still means adding a row here (Cloudinary has no public,
-// unsigned way to say "list every tag that exists" — only "list resources
-// for this known tag" — so we can't auto-discover new slugs without a
-// backend). Once a slug is listed here, tagging its photos is enough to make
-// it appear; a country with nothing tagged yet is simply skipped.
-const COUNTRY_DEFS = [
-  { name: "Austria", city: "Vienna", slug: "austria" },
-  { name: "Hungary", city: "Budapest", slug: "hungary" },
-];
+// No per-country list here anymore — every photo gets the same shared tag
+// below, and the country itself (name + slug) is derived from the Cloudinary
+// folder it sits in (e.g. `photography/bolivia` → "Bolivia" / "bolivia").
+// Tag a new folder's photos with PHOTOGRAPHY_TAG and it appears with zero
+// code changes.
+const PHOTOGRAPHY_TAG = "photography";
 const HEIGHTS = [500, 380, 480, 340, 490, 400, 460, 320];
 const CAMERAS = ["Sony A7 III", "Fujifilm X100V", "Canon EOS R6", "DJI Mavic 3"];
-const YEARS = [2021, 2022, 2023, 2024];
 
 const CLOUDINARY_CLOUD_NAME = "dsiqjkgaw";
 
@@ -28,10 +22,8 @@ function cloudinaryDeliveryUrl(resource, transform) {
 }
 
 // Lists every image tagged `tag` via Cloudinary's unsigned "resource list by
-// tag" endpoint. Requires that setting to be turned on in the Cloudinary
-// account (Settings → Security → Resource list) and photos to be tagged
-// with the country's slug — until then, or for a country with nothing
-// tagged, this returns [] and the caller falls back to mock photos.
+// tag" endpoint (requires that setting on in Cloudinary: Settings → Security
+// → Resource list). Returns [] if it's off or the tag has nothing on it.
 async function fetchTaggedPhotos(tag) {
   try {
     const res = await fetch(
@@ -39,9 +31,7 @@ async function fetchTaggedPhotos(tag) {
     );
     if (!res.ok) return [];
     const data = await res.json();
-    return (data.resources || []).sort((a, b) =>
-      a.created_at.localeCompare(b.created_at)
-    );
+    return data.resources || [];
   } catch {
     return [];
   }
@@ -56,38 +46,62 @@ function shuffle(array) {
   return result;
 }
 
-function buildRealPhotos(resources, c, ci) {
-  return resources.map((r, i) => ({
-    id: r.public_id,
-    // Real aspect ratio from Cloudinary — the filmstrip/grid size each tile
-    // to this, so the layout is genuinely photo-driven, not just labeled so.
-    aspect: `${r.width}/${r.height}`,
-    height: HEIGHTS[i % HEIGHTS.length],
-    location: `${c.city}, ${c.name}`,
-    date: YEARS[(i + ci) % YEARS.length],
-    camera: CAMERAS[(i + ci) % CAMERAS.length],
-    thumbSrc: cloudinaryDeliveryUrl(r, "f_auto,q_auto,w_700"),
-    src: cloudinaryDeliveryUrl(r, "f_auto,q_auto,w_1600"),
-  }));
+// The last path segment of the asset's folder is the country slug, e.g.
+// "photography/bolivia" -> "bolivia". Resources uploaded outside any
+// sub-folder (asset_folder === "photography") have no country and are
+// skipped rather than crashing on an empty slug.
+function folderSlug(resource) {
+  const segments = (resource.asset_folder || "").split("/");
+  return segments.length > 1 ? segments[segments.length - 1] : null;
+}
+
+function slugToName(slug) {
+  return slug.charAt(0).toUpperCase() + slug.slice(1);
+}
+
+function buildPhotos(resources, name) {
+  return [...resources]
+    .sort((a, b) => a.created_at.localeCompare(b.created_at))
+    .map((r, i) => ({
+      id: r.public_id,
+      // Real aspect ratio from Cloudinary — the filmstrip/grid size each
+      // tile to this, so the layout is genuinely photo-driven.
+      aspect: `${r.width}/${r.height}`,
+      height: HEIGHTS[i % HEIGHTS.length],
+      location: name,
+      date: new Date(r.created_at).getFullYear(),
+      camera: CAMERAS[i % CAMERAS.length],
+      thumbSrc: cloudinaryDeliveryUrl(r, "f_auto,q_auto,w_700"),
+      src: cloudinaryDeliveryUrl(r, "f_auto,q_auto,w_1600"),
+    }));
 }
 
 async function buildCountries() {
-  const withPhotos = await Promise.all(
-    COUNTRY_DEFS.map(async (c, ci) => {
-      const resources = await fetchTaggedPhotos(c.slug);
-      if (!resources.length) return null;
-      const photos = buildRealPhotos(resources, c, ci);
-      return {
-        ...c,
-        coverAspect: photos[0].aspect,
-        photoCount: photos.length,
-        coverSrc: photos[0].thumbSrc,
-        photos,
-      };
-    })
-  );
+  const resources = await fetchTaggedPhotos(PHOTOGRAPHY_TAG);
+
+  const bySlug = new Map();
+  resources.forEach((r) => {
+    const slug = folderSlug(r);
+    if (!slug) return;
+    if (!bySlug.has(slug)) bySlug.set(slug, []);
+    bySlug.get(slug).push(r);
+  });
+
+  const countries = Array.from(bySlug, ([slug, group]) => {
+    const name = slugToName(slug);
+    const photos = buildPhotos(group, name);
+    return {
+      name,
+      slug,
+      coverAspect: photos[0].aspect,
+      photoCount: photos.length,
+      coverSrc: photos[0].thumbSrc,
+      photos,
+    };
+  });
+
   // Reshuffle tile order on every page load so the mosaic re-flows.
-  return shuffle(withPhotos.filter(Boolean));
+  return shuffle(countries);
 }
 
 // Fetches + builds the country/photo list once per page load (not once per
