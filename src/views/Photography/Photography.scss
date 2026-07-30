@@ -210,6 +210,10 @@ $font-serif: "Cormorant Garamond", serif;
       flex-shrink: 0;
       cursor: pointer;
       overflow: hidden;
+      // Caps how wide a single item can get — without this, a panoramic
+      // photo's real aspect ratio at the filmstrip's fixed height would
+      // stretch it across nearly the whole screen.
+      max-width: $size-640;
 
       img {
         display: block;

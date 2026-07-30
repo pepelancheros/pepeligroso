@@ -59,21 +59,36 @@ function slugToName(slug) {
   return slug.charAt(0).toUpperCase() + slug.slice(1);
 }
 
+// Must match $size-640, the filmstrip item's max-width in Photography.scss.
+const FILMSTRIP_MAX_WIDTH = 640;
+
 function buildPhotos(resources, name) {
   return [...resources]
     .sort((a, b) => a.created_at.localeCompare(b.created_at))
-    .map((r, i) => ({
-      id: r.public_id,
-      // Real aspect ratio from Cloudinary — the filmstrip/grid size each
-      // tile to this, so the layout is genuinely photo-driven.
-      aspect: `${r.width}/${r.height}`,
-      height: HEIGHTS[i % HEIGHTS.length],
-      location: name,
-      date: new Date(r.created_at).getFullYear(),
-      camera: CAMERAS[i % CAMERAS.length],
-      thumbSrc: cloudinaryDeliveryUrl(r, "f_auto,q_auto,w_700"),
-      src: cloudinaryDeliveryUrl(r, "f_auto,q_auto,w_1600"),
-    }));
+    .map((r, i) => {
+      const aspectRatio = r.width / r.height;
+      // A very wide (panoramic) photo simply doesn't have enough native
+      // vertical resolution to fill a tall filmstrip row without the browser
+      // upscaling it — that upscale is what reads as pixelation. Cap the
+      // assigned height to what the photo can actually cover at its capped
+      // display width, so it renders shorter instead of blurry.
+      const maxHeightAtCap = FILMSTRIP_MAX_WIDTH / aspectRatio;
+      const height = Math.round(
+        Math.min(HEIGHTS[i % HEIGHTS.length], maxHeightAtCap)
+      );
+      return {
+        id: r.public_id,
+        // Real aspect ratio from Cloudinary — the filmstrip/grid size each
+        // tile to this, so the layout is genuinely photo-driven.
+        aspect: `${r.width}/${r.height}`,
+        height,
+        location: name,
+        date: new Date(r.created_at).getFullYear(),
+        camera: CAMERAS[i % CAMERAS.length],
+        thumbSrc: cloudinaryDeliveryUrl(r, "f_auto,q_auto,w_1100"),
+        src: cloudinaryDeliveryUrl(r, "f_auto,q_auto,w_1600"),
+      };
+    });
 }
 
 async function buildCountries() {
