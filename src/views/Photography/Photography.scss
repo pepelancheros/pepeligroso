@@ -63,24 +63,28 @@ $font-serif: "Cormorant Garamond", serif;
   }
 
   // ── Country grid (masonry) ──────────────────────────────────────────
-  // CSS multi-column layout, not CSS Grid: each tile's height comes from its
-  // own cover photo's aspect-ratio (see coverAspect in Photography.jsx)
-  // instead of a fixed row height, so the mosaic reads as photo-driven.
+  // Real masonry, computed in JS (distributeIntoColumns in Photography.jsx):
+  // each tile goes into whichever column currently has the least height, so
+  // it stays balanced regardless of the random tile order. Each tile's own
+  // height still comes from its cover photo's real aspect-ratio.
   &__grid {
-    column-count: 3;
-    column-gap: $size-16;
+    display: flex;
+    gap: $size-16;
     max-width: pxToRem(1400px);
     margin: 0 auto;
     padding: 0 $size-48 $size-96;
 
     @media (max-width: 900px) {
-      column-count: 2;
       padding: 0 $size-16 $size-16;
     }
+  }
 
-    @media (max-width: 560px) {
-      column-count: 1;
-    }
+  &__grid-column {
+    display: flex;
+    flex-direction: column;
+    gap: $size-16;
+    flex: 1;
+    min-width: 0;
   }
 
   &__loader {
@@ -97,8 +101,6 @@ $font-serif: "Cormorant Garamond", serif;
     position: relative;
     overflow: hidden;
     cursor: pointer;
-    break-inside: avoid;
-    margin-bottom: $size-16;
   }
 
   &__tile-img {

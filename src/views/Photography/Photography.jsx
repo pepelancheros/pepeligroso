@@ -9,6 +9,12 @@ import "./Photography.scss";
 // Tag a new folder's photos with PHOTOGRAPHY_TAG and it appears with zero
 // code changes.
 const PHOTOGRAPHY_TAG = "photography";
+// Tag a photo `starred` to bump it to the front of its country's filmstrip
+// (ahead of the rest, which stay in chronological order). Tag one photo per
+// country `cover` to pin it as that country's grid tile — otherwise a random
+// photo from the country is used.
+const STARRED_TAG = "starred";
+const COVER_TAG = "cover";
 const HEIGHTS = [500, 380, 480, 340, 490, 400, 460, 320];
 const CAMERAS = ["Sony A7 III", "Fujifilm X100V", "Canon EOS R6", "DJI Mavic 3"];
 
@@ -62,9 +68,14 @@ function slugToName(slug) {
 // Must match $size-640, the filmstrip item's max-width in Photography.scss.
 const FILMSTRIP_MAX_WIDTH = 640;
 
-function buildPhotos(resources, name) {
+function buildPhotos(resources, name, starredIds) {
   return [...resources]
-    .sort((a, b) => a.created_at.localeCompare(b.created_at))
+    .sort((a, b) => {
+      const aStarred = starredIds.has(a.public_id);
+      const bStarred = starredIds.has(b.public_id);
+      if (aStarred !== bStarred) return aStarred ? -1 : 1;
+      return a.created_at.localeCompare(b.created_at);
+    })
     .map((r, i) => {
       const aspectRatio = r.width / r.height;
       // A very wide (panoramic) photo simply doesn't have enough native
@@ -92,7 +103,13 @@ function buildPhotos(resources, name) {
 }
 
 async function buildCountries() {
-  const resources = await fetchTaggedPhotos(PHOTOGRAPHY_TAG);
+  const [resources, starredResources, coverResources] = await Promise.all([
+    fetchTaggedPhotos(PHOTOGRAPHY_TAG),
+    fetchTaggedPhotos(STARRED_TAG),
+    fetchTaggedPhotos(COVER_TAG),
+  ]);
+  const starredIds = new Set(starredResources.map((r) => r.public_id));
+  const coverIds = new Set(coverResources.map((r) => r.public_id));
 
   const bySlug = new Map();
   resources.forEach((r) => {
@@ -104,19 +121,44 @@ async function buildCountries() {
 
   const countries = Array.from(bySlug, ([slug, group]) => {
     const name = slugToName(slug);
-    const photos = buildPhotos(group, name);
+    const photos = buildPhotos(group, name, starredIds);
+    // Pick randomly among the photos tagged `cover` (so re-tagging several
+    // gives a different one each page load); if none are tagged, pick
+    // randomly from every photo in the country instead.
+    const coverCandidates = photos.filter((p) => coverIds.has(p.id));
+    const coverPool = coverCandidates.length ? coverCandidates : photos;
+    const coverPhoto = coverPool[Math.floor(Math.random() * coverPool.length)];
     return {
       name,
       slug,
-      coverAspect: photos[0].aspect,
+      coverAspect: coverPhoto.aspect,
       photoCount: photos.length,
-      coverSrc: photos[0].thumbSrc,
+      coverSrc: coverPhoto.thumbSrc,
       photos,
     };
   });
 
   // Reshuffle tile order on every page load so the mosaic re-flows.
   return shuffle(countries);
+}
+
+// True masonry placement: each item goes into whichever column currently has
+// the least accumulated height, using its real aspect ratio (columns share
+// the same width, so 1/aspect is directly comparable across items). Avoids
+// CSS column-count's balance-by-estimate, which gets lumpy with few items.
+function distributeIntoColumns(countries, columnCount) {
+  const columns = Array.from({ length: columnCount }, () => []);
+  const heights = new Array(columnCount).fill(0);
+  countries.forEach((country) => {
+    const [w, h] = country.coverAspect.split("/").map(Number);
+    let shortest = 0;
+    for (let i = 1; i < columnCount; i++) {
+      if (heights[i] < heights[shortest]) shortest = i;
+    }
+    columns[shortest].push(country);
+    heights[shortest] += h / w;
+  });
+  return columns;
 }
 
 // Fetches + builds the country/photo list once per page load (not once per
@@ -152,6 +194,12 @@ export function PhotographyView() {
   // On mobile there's no separate filmstrip page — a country opens straight
   // into the lightbox, which doubles as the whole gallery experience there.
   const isMobile = pageWidth < 700;
+
+  // Matches the grid's width breakpoints (900px / 560px).
+  const gridColumnCount = pageWidth <= 560 ? 1 : pageWidth <= 900 ? 2 : 3;
+  const gridColumns = countries
+    ? distributeIntoColumns(countries, gridColumnCount)
+    : [];
 
   const view = slug ? "gallery" : "grid";
   const country =
@@ -254,25 +302,29 @@ export function PhotographyView() {
 
           {countries ? (
             <div className="photography__grid">
-              {countries.map((c) => (
-                <div
-                  key={c.slug}
-                  className="photography__tile"
-                  style={{ aspectRatio: c.coverAspect }}
-                  onClick={() => openCountry(c.slug)}
-                >
-                  <img
-                    className="photography__tile-img"
-                    src={c.coverSrc}
-                    alt={c.name}
-                    loading="lazy"
-                  />
-                  <div className="photography__tile-overlay">
-                    <div className="photography__tile-text">
-                      <div className="photography__tile-name">{c.name}</div>
-                      <div className="photography__tile-cta">See Project →</div>
+              {gridColumns.map((column, ci) => (
+                <div className="photography__grid-column" key={ci}>
+                  {column.map((c) => (
+                    <div
+                      key={c.slug}
+                      className="photography__tile"
+                      style={{ aspectRatio: c.coverAspect }}
+                      onClick={() => openCountry(c.slug)}
+                    >
+                      <img
+                        className="photography__tile-img"
+                        src={c.coverSrc}
+                        alt={c.name}
+                        loading="lazy"
+                      />
+                      <div className="photography__tile-overlay">
+                        <div className="photography__tile-text">
+                          <div className="photography__tile-name">{c.name}</div>
+                          <div className="photography__tile-cta">See Project →</div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
               ))}
             </div>
