@@ -13,7 +13,6 @@ $photo-lightbox-bg: rgba(4, 4, 4, 0.97);
 $font-display: "TuskerGrotesk", sans-serif;
 $font-body: "Montserrat", sans-serif;
 $font-mono: "Space Mono", monospace;
-$font-serif: "Cormorant Garamond", serif;
 
 .photography {
   padding-top: pxToRem(80px);
@@ -132,11 +131,15 @@ $font-serif: "Cormorant Garamond", serif;
   }
 
   &__tile-name {
-    font-family: $font-serif;
-    font-style: italic;
-    font-weight: 500;
-    font-size: pxToRem(64px);
-    color: #f5f3ef;
+    font-family: $font-display;
+    font-weight: 300;
+    // Fluido porque el nombre vive dentro de una columna del grid, que en el
+    // peor caso (3 columnas justo sobre 900px) deja ~210px útiles: ahí un
+    // "COLOMBIA" a 64px se sale, y uno largo como "UNITED STATES" mucho más.
+    font-size: clamp(pxToRem(32px), 4vw, pxToRem(64px));
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: $photo-text;
     margin: 0 0 $size-8 0;
     line-height: 1;
   }
@@ -183,11 +186,11 @@ $font-serif: "Cormorant Garamond", serif;
   }
 
   &__gallery-title {
-    font-family: $font-serif;
-    font-style: italic;
-    font-weight: 500;
+    font-family: $font-display;
+    font-weight: 300;
     font-size: clamp(pxToRem(56px), 6vw, pxToRem(150px));
     letter-spacing: 1px;
+    text-transform: uppercase;
     line-height: 1;
     text-align: center;
     padding: $size-32 $size-48 $size-48;
@@ -434,7 +437,7 @@ $font-serif: "Cormorant Garamond", serif;
     display: inline-block;
     padding: $size-16 $size-32;
     background-color: $color-red-500;
-    color: white;
+    color: $photo-text;
     font-family: $font-display;
     font-size: pxToRem(18px);
     letter-spacing: 0.05em;
