@@ -1,4 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
+import Icon from "../Icon/Icon.jsx";
 import "./Navbar.scss";
 
 export default function Navbar() {
@@ -7,9 +8,12 @@ export default function Navbar() {
 
   return (
     <nav className={`navbar${isPhotography ? " navbar--dark" : ""}`}>
-      <NavLink to="/" className="navbar__title">
-        <span className="red-text">&lt;P</span>epeligroso{" "}
-        <span className="red-text">/&gt;</span>
+      <NavLink to="/" className="navbar__brand">
+        <span className="navbar__title">
+          <span className="red-text">&lt;P</span>epeligroso{" "}
+          <span className="red-text">/&gt;</span>
+        </span>
+        {isPhotography && <Icon variant="navbar" />}
       </NavLink>
       <div className="navbar__links">
         <NavLink

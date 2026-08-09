@@ -11,12 +11,19 @@
   justify-content: space-between;
   box-sizing: border-box;
 
+  // El link del logo: envuelve el wordmark y, en /photography, el ícono.
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: $size-12;
+    text-decoration: none;
+  }
+
   &__title {
     font-size: $size-24;
     font-weight: 500;
     color: $color-black-500;
     font-family: 'Montserrat', sans-serif;
-    text-decoration: none;
   }
 
   &__links {
