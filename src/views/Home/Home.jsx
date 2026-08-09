@@ -26,7 +26,7 @@ export function HomeView() {
   return (
     <main className="home">
       <section className="home__banner">
-        <Icon />
+        <Icon variant="hero" />
         <div className="home__banner-info-container">
           <div className="home__title-container">
             <span className="tusker-font home__creative-text">creative</span>
