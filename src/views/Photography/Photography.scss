@@ -433,18 +433,17 @@ $font-mono: "Space Mono", monospace;
     line-height: 1.7;
   }
 
+  // La piel viene de `.cta-button`; aquí solo se corrige el hover, porque sobre
+  // el fondo casi negro la sombra del CTA global no se percibe.
   &__contact-btn {
-    display: inline-block;
-    padding: $size-16 $size-32;
-    background-color: $color-red-500;
-    color: $photo-text;
-    font-family: $font-display;
-    font-size: pxToRem(18px);
-    letter-spacing: 0.05em;
-    text-decoration: none;
     transition: background-color 0.2s ease;
 
-    &:hover {
+    // Calificado con `.cta-button` a propósito: sin eso las dos reglas de hover
+    // empatan en especificidad y el desempate queda en el orden de importación
+    // de main.scss, que es fácil de voltear sin darse cuenta.
+    &.cta-button:hover,
+    &.cta-button:focus {
+      box-shadow: none;
       background-color: color.adjust($color-red-500, $lightness: -8%);
     }
   }

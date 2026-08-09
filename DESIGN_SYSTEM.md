@@ -16,11 +16,13 @@ Fuente de verdad actual de tokens: [`src/assets/_variables.scss`](src/assets/_va
 | Fuente | Origen | Uso actual | Estado |
 |---|---|---|---|
 | **Montserrat** (100–900, itálica) | Google Fonts (`index.html`) | Texto base (`body`), título del navbar | ✅ OK |
-| **TuskerGrotesk** (400 medium, self-hosted `.woff2`) | `src/assets/main.scss` `@font-face` | Títulos, subtítulos, botones CTA vía `.tusker-font` | ✅ OK, pero hay un `@font-face` duplicado y roto en `index.html:19-24` (ruta `./assets/fonts/...` inexistente) — candidato a limpieza |
-| **Space Mono** | Google Fonts (comentado en `index.html:18`) | Eyebrow del hero en Photography | 🐛 **Roto**: el link está comentado, nunca se descarga la fuente, cae a `monospace` genérico del sistema |
+| **TuskerGrotesk** (una sola cara, self-hosted `.woff2`) | `src/assets/main.scss` `@font-face` | Títulos, subtítulos y CTAs vía `.tusker-font` / `.cta-button`; en Photography también los nombres de país y el título de galería | ⚠️ Hay un `@font-face` duplicado y roto en `index.html:17-20` (apunta a `./assets/fonts/`, que no existe) — candidato a limpieza. Ver además la nota de pesos abajo |
+| **Space Mono** | Google Fonts (`index.html:15`) | Eyebrow del hero y `__tile-cta` en Photography | ✅ OK |
 | **Material Symbols Outlined** | Google Fonts | Iconos de estrella en Contact | ✅ OK |
 
 No hay una pila de fallback definida (`sans-serif`/`monospace` a secas, sin fuentes de sistema intermedias).
+
+**🐛 Pesos sintéticos de TuskerGrotesk**: el `@font-face` declara **un solo archivo** con `font-weight: normal`. Cualquier peso por encima de 400 no existe y el navegador lo falsifica engordando los trazos. Hoy `.photography__hero-title` pide `font-weight: 700` y es el único elemento del sitio con negrita sintética — el resto usa `300`, que resuelve a la cara real. Mismo problema que tenía la itálica de Cormorant (oblicua sintética), que ya se retiró. Pendiente de decidir junto con el rework del texto de ese hero.
 
 **Escala de tamaños**: no existe una escala tipográfica dedicada. Home/Navbar reutilizan los tokens de espaciado (`$size-24`, `$size-96`...) como `font-size`. Photography usa en cambio literales `pxToRem(Npx)` y `clamp()` ad hoc. Son dos escalas paralelas e inconsistentes.
 
@@ -44,8 +46,8 @@ $generic-border:  rgba(56, 67, 71, 0.37); // borde, derivado de black-500
 
 - `#741720` — blob de hover en `Card.scss:59`
 - `#006CB6`, `#200c54`, `#151526` — prop `bgColor` de las tarjetas de proyecto en `Home.jsx`
-- `#a41623` inline en `Photography.jsx:183` (duplica `$color-red-500`)
-- `white` y `rgba(0,0,0,0.12)` sueltos en varios lugares
+- `white` en `Card.scss:47` — último literal de color de texto que queda; Photography ya no tiene ninguno
+- `rgba(0,0,0,0.12)` — la sombra del CTA, hoy en un solo sitio (`main.scss`), candidata al token `$shadow-hover` de §2.3
 
 No hay soporte de modo oscuro. El único bloque "invertido" es `.photography__about` (fondo `$color-black-500`, texto `$color-beige-500`), tratado como caso puntual y no como tema.
 
@@ -70,12 +72,12 @@ Los tokens 640/768/896/1024 están declarados pero no se usan en ningún compone
 
 | Componente | Estado |
 |---|---|
-| `Navbar`, `Card`, `Icon`, `TypedText` | Únicos componentes reutilizables reales |
-| Botones CTA | **3 estilos distintos** para el mismo rol: `.home__button` (píldora roja), `.photography__contact-btn` (esquinas rectas), `.photography__category-btn` (outline) — sin componente `Button` compartido |
+| `Navbar`, `Card`, `Icon`, `TypedText` | Únicos componentes reutilizables reales. `Icon` acepta `variant="hero" \| "navbar"` y es instanciable varias veces; `TypedText` todavía no (lista hardcodeada y `getElementById` global) |
+| Botones CTA | ✅ **Resuelto**: los dos "SEND ME AN EMAIL" comparten la utilidad `.cta-button`. Cada vista solo aporta layout (`.home__button`) o el ajuste de hover sobre fondo oscuro (`.photography__contact-btn`). El `.photography__category-btn` (outline) que existía ya no está en el código |
 | Section headings | `.home__subtitle` en Home vs. clases propias por sección en Photography (`__hero-title`, `__about-title`, `__contact-title`) — mismo rol semántico, sin compartir |
 | Gallery/masonry, marquee de skills | Patrones autocontenidos, no reutilizados en otras vistas |
 
-**Conclusión del estado actual**: el estilo es ad hoc por vista. Solo dos utilidades son realmente globales: `.red-text` y `.tusker-font`.
+**Conclusión del estado actual**: el estilo sigue siendo mayormente ad hoc por vista, pero ya hay tres utilidades globales — `.red-text`, `.tusker-font` y `.cta-button` — y el ícono de marca aparece en las dos páginas.
 
 ---
 
@@ -103,8 +105,8 @@ $font-size-4xl:  clamp(pxToRem(56px), 10vw, pxToRem(120px)); // hero
 ```
 
 **Acciones para llegar aquí**:
-- Descomentar/arreglar el `<link>` de Space Mono en `index.html` (o quitar la fuente si no vale la pena mantenerla).
-- Eliminar el `@font-face` duplicado y roto de TuskerGrotesk en `index.html:19-24` (dejar solo el de `main.scss`).
+- Eliminar el `@font-face` duplicado y roto de TuskerGrotesk en `index.html:17-20` (dejar solo el de `main.scss`).
+- Decidir qué hacer con los pesos de TuskerGrotesk: o se aceptan solo `300`/`400` (la cara real) y se corrige el `700` sintético del hero de Photography, o se consigue un segundo archivo de verdad para la negrita.
 - Migrar Photography de `pxToRem(Npx)` literales a esta escala nombrada.
 
 ### 2.2 Colores — tokens propuestos
@@ -139,13 +141,15 @@ $shadow-hover: 0 16px 24px 0 rgba(0, 0, 0, 0.12);
 
 | Componente nuevo | Reemplaza | Variantes |
 |---|---|---|
-| `<Button variant="solid" \| "outline" \| "ghost">` | `.home__button`, `.photography__contact-btn`, `.photography__category-btn` | Un solo componente, radio y color por variante |
+| ~~`<Button>`~~ → utilidad `.cta-button` | `.home__button`, `.photography__contact-btn` | ✅ **Hecho**. Se resolvió como utilidad CSS, no como componente React: con un solo rol de botón en el sitio, un componente no aportaba nada sobre una clase. Si aparece una segunda variante (outline, ghost) conviene reevaluarlo |
 | `<SectionHeading>` | `.home__subtitle`, `__hero-title`, `__about-title`, `__contact-title` | Usa `$font-size-3xl`/`4xl` según prop `size` |
 | `<Card>` (ya existe) | — | Reemplazar `bgColor` string por token/constante nombrada |
 
+**Nota sobre el reparto**: el patrón que quedó del CTA es *piel global, layout local* — `.cta-button` define tipografía, color, padding y radio; cada vista solo pone alineación y márgenes. Vale la pena repetirlo al consolidar `<SectionHeading>`.
+
 ### 2.5 Roadmap sugerido (sin romper nada de golpe)
 
-1. Arreglar bugs de fuentes (Space Mono, `@font-face` duplicado) — riesgo bajo, impacto visual inmediato.
+1. Arreglar lo que queda de fuentes: el `@font-face` duplicado y roto de `index.html`, y el `font-weight: 700` sintético de `.photography__hero-title` — riesgo bajo, impacto visual inmediato. (Space Mono ya carga bien; Cormorant Garamond se retiró.)
 2. Introducir los tokens nuevos en `_variables.scss` junto a los existentes (sin borrar nada aún).
 3. Migrar Photography a los breakpoints y escala tipográfica compartidos.
 4. Extraer `<Button>` y `<SectionHeading>`, migrar Home y Photography a usarlos.

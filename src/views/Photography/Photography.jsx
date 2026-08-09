@@ -342,7 +342,7 @@ export function PhotographyView() {
             </p>
             <a
               href="mailto:pepe.lancheros@gmail.com"
-              className="photography__contact-btn"
+              className="cta-button photography__contact-btn"
             >
               SEND ME AN EMAIL
             </a>

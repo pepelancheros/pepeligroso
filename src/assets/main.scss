@@ -22,3 +22,30 @@ body {
   font-family: TuskerGrotesk;
   font-weight: 300;
 }
+
+// La píldora del CTA, compartida entre Home y Photography. Solo la piel: el
+// layout (alineación y márgenes) lo pone cada vista, porque cada una lo coloca
+// distinto dentro de su propio contenedor.
+.cta-button {
+  display: inline-block;
+  font-family: TuskerGrotesk;
+  font-weight: 300;
+  font-size: $size-24;
+  color: $color-beige-500;
+  background-color: $color-red-500;
+  border: none;
+  padding: $size-12 $size-24 $size-8;
+  border-radius: 50px;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 16px 24px 0 rgba(0, 0, 0, 0.12);
+  }
+}
+
+@media all and (min-width: 48em) {
+  .cta-button {
+    font-size: $size-32;
+  }
+}

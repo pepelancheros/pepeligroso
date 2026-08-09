@@ -39,7 +39,7 @@ export function HomeView() {
           </p>
           <a
             href="#contact"
-            className="tusker-font home__button home__button--banner"
+            className="cta-button home__button home__button--banner"
           >
             CONTACT ME
           </a>
@@ -111,7 +111,7 @@ export function HomeView() {
           >
             <Card
               img={dicapta}
-              text="Website migration and development. Made with Vue.js, Vue Router and CMS integration."
+              text="Website migration and development. Made with Vue.js, Vue Router and CMS integration (Strapi)."
               bgColor="#006CB6"
               link="https://dicapta.netlify.app/"
             />
@@ -126,7 +126,7 @@ export function HomeView() {
             <Card
               img="https://upload.wikimedia.org/wikipedia/commons/6/67/Morningstar_Logo.svg"
               text="Development of a large website. With Vue.js, CMS
-              integration, RESTful API and design."
+              integration (Contentful), RESTful API and design."
               link="https://indexes.morningstar.com/"
             />
           </div>
@@ -139,7 +139,7 @@ export function HomeView() {
           >
             <Card
               img="https://cdn.prod.website-files.com/605f2547102fdbbeff1b21e0/60eef7c33281b745d059ca69_proper.png"
-              text="Development of a website and a Google Chrome extension. With Vue.js and CMS integration."
+              text="Development of a website and a Google Chrome extension. With Vue.js and CMS integrationn (Strapi)."
               bgColor="#200c54"
               hideLinkText={true}
             />
@@ -239,7 +239,7 @@ export function HomeView() {
             <p className="contact__text">Are you minding a project?</p>
             <a
               href="mailto:pepe.lancheros@gmail.com"
-              className="tusker-font home__button"
+              className="cta-button home__button"
             >
               SEND ME AN EMAIL
             </a>
