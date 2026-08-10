@@ -26,6 +26,26 @@
     font-family: 'Montserrat', sans-serif;
   }
 
+  // El envoltorio existe siempre (sobre 48em) aunque el ícono esté oculto, para
+  // reservarle el sitio: así el navbar no cambia de altura cuando el ícono
+  // aparece al scrollear. El hueco que deja mientras tanto cae en el centro de
+  // la barra, entre el wordmark y los links, donde no se nota.
+  &__icon {
+    display: none;
+
+    @media all and (min-width: 48em) {
+      display: block;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    &--visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
   &__links {
     display: flex;
     align-items: center;
@@ -77,5 +97,13 @@
       color: $color-red-500;
       border-bottom-color: $color-red-500;
     }
+  }
+}
+
+// Va al final a propósito: empata en especificidad con la regla que define el
+// transition, así que solo gana si aparece después.
+@media (prefers-reduced-motion: reduce) {
+  .navbar__icon {
+    transition: none;
   }
 }
