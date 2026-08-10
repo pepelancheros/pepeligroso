@@ -16,7 +16,7 @@ Fuente de verdad actual de tokens: [`src/assets/_variables.scss`](src/assets/_va
 | Fuente | Origen | Uso actual | Estado |
 |---|---|---|---|
 | **Montserrat** (100–900, itálica) | Google Fonts (`index.html`) | Texto base (`body`), título del navbar | ✅ OK |
-| **TuskerGrotesk** (una sola cara, self-hosted `.woff2`) | `src/assets/main.scss` `@font-face` | Títulos, subtítulos y CTAs vía `.tusker-font` / `.cta-button`; en Photography también los nombres de país y el título de galería | ⚠️ Hay un `@font-face` duplicado y roto en `index.html:17-20` (apunta a `./assets/fonts/`, que no existe) — candidato a limpieza. Ver además la nota de pesos abajo |
+| **TuskerGrotesk** (una sola cara, self-hosted `.woff2`) | `src/assets/main.scss` `@font-face` | Títulos, subtítulos y CTAs vía `.tusker-font` / `.cta-button`; en Photography también los nombres de país y el título de galería | ✅ Declaración única. Ver la nota de pesos abajo |
 | **Space Mono** | Google Fonts (`index.html:15`) | Eyebrow del hero y `__tile-cta` en Photography | ✅ OK |
 | **Material Symbols Outlined** | Google Fonts | Iconos de estrella en Contact | ✅ OK |
 
@@ -105,7 +105,6 @@ $font-size-4xl:  clamp(pxToRem(56px), 10vw, pxToRem(120px)); // hero
 ```
 
 **Acciones para llegar aquí**:
-- Eliminar el `@font-face` duplicado y roto de TuskerGrotesk en `index.html:17-20` (dejar solo el de `main.scss`).
 - Decidir qué hacer con los pesos de TuskerGrotesk: o se aceptan solo `300`/`400` (la cara real) y se corrige el `700` sintético del hero de Photography, o se consigue un segundo archivo de verdad para la negrita.
 - Migrar Photography de `pxToRem(Npx)` literales a esta escala nombrada.
 
@@ -149,7 +148,7 @@ $shadow-hover: 0 16px 24px 0 rgba(0, 0, 0, 0.12);
 
 ### 2.5 Roadmap sugerido (sin romper nada de golpe)
 
-1. Arreglar lo que queda de fuentes: el `@font-face` duplicado y roto de `index.html`, y el `font-weight: 700` sintético de `.photography__hero-title` — riesgo bajo, impacto visual inmediato. (Space Mono ya carga bien; Cormorant Garamond se retiró.)
+1. Arreglar lo que queda de fuentes: el `font-weight: 700` sintético de `.photography__hero-title` — riesgo bajo, impacto visual inmediato. (Space Mono ya carga bien, Cormorant Garamond se retiró y el `@font-face` duplicado de `index.html` ya se eliminó.)
 2. Introducir los tokens nuevos en `_variables.scss` junto a los existentes (sin borrar nada aún).
 3. Migrar Photography a los breakpoints y escala tipográfica compartidos.
 4. Extraer `<Button>` y `<SectionHeading>`, migrar Home y Photography a usarlos.
