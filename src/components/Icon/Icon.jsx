@@ -1,72 +1,84 @@
 import "./Icon.scss";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import avatar from "../../../public/assets/images/avatars.svg";
 import avatarNoEyes from "../../../public/assets/images/avatar-no-eyes.svg";
 import eye from "../../../public/assets/images/eye.png";
 import useWindowDimensions from "../../utilities/useWindowDimensions.jsx";
 
-export default function icon() {
+// Por debajo de esto no hay puntero que seguir, así que se usa el avatar
+// plano (que ya trae los ojos dibujados) en vez del que los sigue.
+const POINTER_BREAKPOINT = 768;
+
+export default function Icon({ variant = "hero" }) {
   const { pageWidth } = useWindowDimensions();
+  const containerRef = useRef(null);
+  const tracksPointer = pageWidth > POINTER_BREAKPOINT;
 
   useEffect(() => {
-    const eyes = document.querySelectorAll(".icon__eye");
-    const anchor = document.getElementById("anchor");
-    const rekt = anchor.getBoundingClientRect();
-    const anchorX = rekt.left + rekt.width / 2;
-    const anchorY = rekt.top + rekt.height / 2;
+    if (!tracksPointer) return;
+    const container = containerRef.current;
+    // Solo los ojos de ESTA instancia: con el ícono en el hero y en el
+    // navbar a la vez, un querySelectorAll global movería los dos con el
+    // mismo anchor.
+    const eyes = container.querySelectorAll(".icon__eye");
 
-    let animationFrameId;
+    let animationFrameId = null;
+
+    function angle(cx, cy, ex, ey) {
+      return (Math.atan2(ey - cy, ex - cx) * 180) / Math.PI;
+    }
 
     const handleMouseMove = (ev) => {
-      if (animationFrameId) return; // Prevent multiple frames
-
+      if (animationFrameId) return;
       animationFrameId = requestAnimationFrame(() => {
-        const mouseX = ev.clientX;
-        const mouseY = ev.clientY;
-        const angleDeg = angle(mouseX, mouseY, anchorX, anchorY);
-
-        eyes.forEach((eye) => {
-          eye.style.transform = `rotate(${270 + angleDeg}deg)`;
+        animationFrameId = null;
+        // El rect se lee en cada frame, no una vez al montar: el ícono del
+        // hero se mueve con el scroll y el del navbar con el resize, y un
+        // rect cacheado hace que los ojos apunten a donde el ícono estaba.
+        const rect = container.getBoundingClientRect();
+        const deg = angle(
+          ev.clientX,
+          ev.clientY,
+          rect.left + rect.width / 2,
+          rect.top + rect.height / 2
+        );
+        eyes.forEach((el) => {
+          el.style.transform = `rotate(${270 + deg}deg)`;
         });
-
-        animationFrameId = null; // Reset the animation frame ID
       });
     };
 
-    function angle(cx, cy, ex, ey) {
-      const dy = ey - cy;
-      const dx = ex - cx;
-      const rad = Math.atan2(dy, dx);
-      const deg = (rad * 180) / Math.PI;
-      return deg;
-    }
-
     document.addEventListener("mousemove", handleMouseMove);
-
-    // Cleanup function to remove the event listener
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId); // Cancel any pending animation frame
-      }
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
-  }, []); // Empty dependency array to run only on mount and unmount
+  }, [tracksPointer]);
+
+  const isNavbar = variant === "navbar";
 
   return (
-    <div id="anchor" className="icon__container">
-      <img
-        id="icon"
-        className="icon"
-        src={pageWidth < 768 ? avatar : avatarNoEyes}
-        alt="icon of a bald person with beard and a hoodie"
-      />
-      {pageWidth > 768 && (
-        <div className="icon__eyes-container">
-          <img className="icon__eye icon__eye--left" src={eye} alt="" />
-          <img className="icon__eye icon__eye--right" src={eye} alt="" />
-        </div>
-      )}
+    <div
+      ref={containerRef}
+      className={`icon__container icon__container--${variant}`}
+      // En el navbar el ícono va dentro del link que ya dice "Pepeligroso",
+      // así que para un lector de pantalla es decorativo.
+      aria-hidden={isNavbar || undefined}
+    >
+      <div className="icon__art">
+        <img
+          className="icon"
+          src={tracksPointer ? avatarNoEyes : avatar}
+          alt={isNavbar ? "" : "icon of a bald person with beard and a hoodie"}
+        />
+        {tracksPointer && (
+          <div className="icon__eyes-container">
+            <img className="icon__eye icon__eye--left" src={eye} alt="" />
+            <img className="icon__eye icon__eye--right" src={eye} alt="" />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

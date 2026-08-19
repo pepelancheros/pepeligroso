@@ -6,12 +6,104 @@
   background-color: $color-beige-500;
   z-index: 100;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
 
-  h2 {
-    margin: 0;
+  // El link del logo: envuelve el wordmark y, en /photography, el ícono.
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: $size-12;
+    text-decoration: none;
   }
 
   &__title {
+    font-size: $size-24;
     font-weight: 500;
+    color: $color-black-500;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  // El envoltorio existe siempre (sobre 48em) aunque el ícono esté oculto, para
+  // reservarle el sitio: así el navbar no cambia de altura cuando el ícono
+  // aparece al scrollear. El hueco que deja mientras tanto cae en el centro de
+  // la barra, entre el wordmark y los links, donde no se nota.
+  &__icon {
+    display: none;
+
+    @media all and (min-width: 48em) {
+      display: block;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    &--visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: $size-12;
+  }
+
+  &__separator {
+    font-family: TuskerGrotesk;
+    font-size: $size-16;
+  }
+
+  &__link {
+    font-family: TuskerGrotesk;
+    font-size: $size-16;
+    color: $color-black-500;
+    text-decoration: none;
+    padding: $size-4 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+    letter-spacing: 0.05em;
+
+    &:hover {
+      color: $color-red-500;
+    }
+
+    &--active {
+      color: $color-red-500;
+      border-bottom-color: $color-red-500;
+    }
+  }
+
+  // Dark variant for /photography — cinematic black header instead of the
+  // site's default beige, per that section's fixed dark theme.
+  &--dark {
+    background-color: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(239, 229, 223, 0.12);
+
+    .navbar__title,
+    .navbar__link {
+      color: $color-beige-500;
+    }
+
+    .navbar__link:hover {
+      color: $color-red-500;
+    }
+
+    .navbar__link--active {
+      color: $color-red-500;
+      border-bottom-color: $color-red-500;
+    }
+  }
+}
+
+// Va al final a propósito: empata en especificidad con la regla que define el
+// transition, así que solo gana si aparece después.
+@media (prefers-reduced-motion: reduce) {
+  .navbar__icon {
+    transition: none;
   }
 }

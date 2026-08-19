@@ -1,37 +1,92 @@
 @use "/src/assets/variables" as *;
 
+// Alto/ancho del avatar (474×502). Necesario para posicionar el recorte del
+// navbar en vertical, porque en calc() la altura se deriva del ancho.
+$avatar-ratio: 1.0591;
+
 .icon {
-  width: 250px;
-  height: auto;
   display: block;
-  margin: $size-48 auto 0;
+  width: 100%;
+  height: auto;
 
   &__container {
     position: relative;
-    width: 350px;
-    margin: auto;
+    width: var(--icon-size);
+    margin: 0 auto;
   }
 
+  &__art {
+    position: relative;
+    width: 100%;
+  }
+
+  &__eyes-container {
+    position: absolute;
+    inset: 0;
+  }
+
+  // Porcentajes del recuadro del dibujo, derivados de la geometría en px que
+  // tenía el hero: top (182 - 48) / 370.68, left/right 125 / 350, width 31 / 350.
   &__eye {
     position: absolute;
-    width: 31px;
+    top: 36.15%;
+    width: 8.86%;
+    height: auto;
 
     &--left {
-      top: 182px;
-      left: 125px;
+      left: 35.71%;
     }
 
     &--right {
-      top: 182px;
-      right: 125px;
+      right: 35.71%;
     }
   }
-}
 
-// styles for tablet size (768px) and higher
-@media all and (min-width: 48em) {
-  .icon {
-    margin: $size-48 auto 0;
-    width: 350px;
+  // ── Variante hero (Home) ────────────────────────────────────────────
+  &__container--hero {
+    --icon-size: 250px;
+    margin-top: $size-48;
+
+    @media all and (min-width: 48em) {
+      --icon-size: 350px;
+    }
+  }
+
+  // ── Variante navbar (Photography) ───────────────────────────────────
+  // Un plano medio del avatar, no un primer plano de la cara: el dibujo ya trae
+  // su propio círculo de fondo, así que el zoom se afina para que ese círculo
+  // llene el marco (por debajo de ~1.15 queda un anillo transparente) sin
+  // cerrarse tanto sobre la cara que el fondo desaparezca (a 2.4 ya no se ve).
+  // El zoom también decide si el seguimiento del cursor se percibe: la pupila
+  // orbita a un 19.7% del ancho del ojo, así que a zoom 1.5 el ojo mide ~5.9px
+  // y la pupila recorre ~2.3px de extremo a extremo. Sutil, pero visible. Bajar
+  // más el zoom lo vuelve imperceptible y dejaría el seguimiento sin sentido.
+  &__container--navbar {
+    --icon-size: 44px;
+    --icon-zoom: 1.50; // cuánto más grande es el dibujo que el marco
+    --icon-focus-x: 0.5; // punto del dibujo que queda centrado en el marco
+    --icon-focus-y: 0.45;
+
+    // El navbar móvil ya va apretado y bajo 768px no hay puntero que seguir.
+    display: none;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    margin: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    @media all and (min-width: 48em) {
+      display: block;
+    }
+
+    .icon__art {
+      position: absolute;
+      width: calc(var(--icon-size) * var(--icon-zoom));
+      left: calc(var(--icon-size) * (0.5 - var(--icon-focus-x) * var(--icon-zoom)));
+      top: calc(
+        var(--icon-size) * (0.5 - var(--icon-focus-y) * var(--icon-zoom) * #{$avatar-ratio})
+      );
+    }
   }
 }

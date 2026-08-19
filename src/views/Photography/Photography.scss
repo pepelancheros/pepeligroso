@@ -1,0 +1,450 @@
+@use "sass:color";
+@use "/src/assets/variables" as *;
+
+// Fixed cinematic dark theme for /photography — not a togglable site theme,
+// just this section's look (see handoff/photography-portfolio/README.md).
+$photo-bg: #0a0a0a;
+$photo-text: $color-beige-500;
+$photo-muted: rgba(239, 229, 223, 0.6);
+$photo-border: rgba(239, 229, 223, 0.12);
+$photo-film-bg: rgba(10, 10, 10, 0.95);
+$photo-lightbox-bg: rgba(4, 4, 4, 0.97);
+
+$font-display: "TuskerGrotesk", sans-serif;
+$font-body: "Montserrat", sans-serif;
+$font-mono: "Space Mono", monospace;
+
+.photography {
+  padding-top: pxToRem(80px);
+  background-color: $photo-bg;
+  color: $photo-text;
+  min-height: calc(100vh - #{pxToRem(80px)});
+
+  // ── Hero ──────────────────────────────────────────────────────────
+  &__hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: pxToRem(900px);
+    margin: 0 auto;
+    padding: $size-96 $size-32 $size-48;
+  }
+
+  &__hero-eyebrow {
+    font-family: $font-mono;
+    font-weight: 700;
+    font-size: pxToRem(14px);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: $color-red-500;
+    margin: 0 0 $size-16 0;
+  }
+
+  &__hero-title {
+    font-family: $font-display;
+    font-weight: 700;
+    font-size: clamp(pxToRem(40px), 7vw, pxToRem(88px));
+    letter-spacing: 1px;
+    line-height: 1;
+    margin: 0 0 $size-24 0;
+    color: $photo-text;
+  }
+
+  &__hero-description {
+    font-family: $font-body;
+    font-style: italic;
+    font-weight: 400;
+    font-size: pxToRem(18px);
+    line-height: 1.6;
+    color: $photo-muted;
+    margin: 0;
+  }
+
+  // ── Country grid (masonry) ──────────────────────────────────────────
+  // Real masonry, computed in JS (distributeIntoColumns in Photography.jsx):
+  // each tile goes into whichever column currently has the least height, so
+  // it stays balanced regardless of the random tile order. Each tile's own
+  // height still comes from its cover photo's real aspect-ratio.
+  &__grid {
+    display: flex;
+    gap: $size-16;
+    max-width: pxToRem(1400px);
+    margin: 0 auto;
+    padding: 0 $size-48 $size-96;
+
+    @media (max-width: 900px) {
+      padding: 0 $size-16 $size-16;
+    }
+  }
+
+  &__grid-column {
+    display: flex;
+    flex-direction: column;
+    gap: $size-16;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__loader {
+    width: pxToRem(36px);
+    height: pxToRem(36px);
+    margin: $size-96 auto;
+    border: 3px solid $photo-border;
+    border-top-color: $photo-text;
+    border-radius: 50%;
+    animation: photography-spin 0.8s linear infinite;
+  }
+
+  &__tile {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  &__tile-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  &__tile:hover &__tile-img {
+    transform: scale(1.08);
+  }
+
+  &__tile-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0) 55%);
+    display: flex;
+    align-items: flex-end;
+    padding: $size-24;
+    pointer-events: none;
+  }
+
+  &__tile-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__tile-name {
+    font-family: $font-display;
+    font-weight: 300;
+    // Fluido porque el nombre vive dentro de una columna del grid, que en el
+    // peor caso (3 columnas justo sobre 900px) deja ~210px útiles: ahí un
+    // "COLOMBIA" a 64px se sale, y uno largo como "UNITED STATES" mucho más.
+    font-size: clamp(pxToRem(32px), 4vw, pxToRem(64px));
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: $photo-text;
+    margin: 0 0 $size-8 0;
+    line-height: 1;
+  }
+
+  &__tile-cta {
+    font-family: $font-mono;
+    font-weight: 700;
+    font-size: pxToRem(10px);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $color-red-500;
+  }
+
+  // ── Country gallery ──────────────────────────────────────────────────
+  &__gallery {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - #{pxToRem(80px)});
+  }
+
+  &__gallery-topbar {
+    padding: $size-24 $size-48 0;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-8;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: $font-display;
+    font-weight: 600;
+    font-size: pxToRem(13px);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $photo-muted;
+    padding: 0;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $photo-text;
+    }
+  }
+
+  &__gallery-title {
+    font-family: $font-display;
+    font-weight: 300;
+    font-size: clamp(pxToRem(56px), 6vw, pxToRem(150px));
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    line-height: 1;
+    text-align: center;
+    padding: $size-32 $size-48 $size-48;
+  }
+
+  &__filmstrip {
+    display: flex;
+    align-items: flex-end;
+    gap: pxToRem(14px);
+    overflow-x: auto;
+    padding: 0 $size-48 $size-32;
+    margin-top: auto;
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // old Edge/IE
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome, Safari
+    }
+
+    &-item {
+      position: relative;
+      flex-shrink: 0;
+      cursor: pointer;
+      overflow: hidden;
+      // Caps how wide a single item can get — without this, a panoramic
+      // photo's real aspect ratio at the filmstrip's fixed height would
+      // stretch it across nearly the whole screen.
+      max-width: $size-640;
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  &__thumbrow {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    background: $photo-film-bg;
+    border-top: 1px solid $photo-border;
+    padding: $size-12 $size-48;
+    display: flex;
+    gap: $size-8;
+    overflow-x: auto;
+
+    &--lightbox {
+      position: static;
+      background: transparent;
+      padding: $size-16 pxToRem(100px) $size-32;
+
+      @media (max-width: 700px) {
+        padding: $size-16 $size-16 $size-32;
+      }
+
+      .photography__thumb {
+        width: 56px;
+        height: 56px;
+      }
+    }
+  }
+
+  &__thumb {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &:hover,
+    &--active {
+      opacity: 1;
+    }
+  }
+
+  // ── Lightbox ──────────────────────────────────────────────────────────
+  &__lightbox {
+    position: fixed;
+    inset: 0;
+    background: $photo-lightbox-bg;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  &__lightbox-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  &__lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 32px;
+    background: none;
+    border: none;
+    color: $photo-text;
+    font-size: pxToRem(32px);
+    cursor: pointer;
+    line-height: 1;
+    z-index: 5;
+  }
+
+  &__lightbox-stage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: $size-32 pxToRem(100px);
+
+    @media (max-width: 700px) {
+      // No side arrows on mobile (nav is the thumbnail carousel below), so
+      // the frame can use the width they used to sit in.
+      padding: $size-16;
+    }
+  }
+
+  &__lightbox-nav {
+    position: absolute;
+    background: none;
+    border: none;
+    color: $photo-text;
+    font-size: pxToRem(40px);
+    cursor: pointer;
+    line-height: 1;
+
+    &--prev {
+      left: 24px;
+    }
+
+    &--next {
+      right: 24px;
+    }
+  }
+
+  &__lightbox-frame {
+    position: relative;
+    width: 100%;
+    height: 72vh;
+    max-width: 80vw;
+
+    @media (max-width: 700px) {
+      height: 60vh;
+      max-width: 100%;
+    }
+
+    img {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      // Show the whole photo regardless of orientation — landscape shots no
+      // longer get cropped to fit a portrait-shaped box.
+      object-fit: contain;
+    }
+  }
+
+  &__lightbox-frame-thumb {
+    // Already-cached small variant, shown blurred while the full-res photo
+    // streams in — reads as instant instead of a stale/frozen frame.
+    filter: blur(16px);
+    transform: scale(1.05); // hide the soft blur edge at the box border
+  }
+
+  &__lightbox-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: pxToRem(36px);
+    height: pxToRem(36px);
+    margin: pxToRem(-18px) 0 0 pxToRem(-18px);
+    border: 3px solid $photo-border;
+    border-top-color: $photo-text;
+    border-radius: 50%;
+    animation: photography-spin 0.8s linear infinite;
+  }
+
+  @keyframes photography-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  &__lightbox-info {
+    font-family: $font-mono;
+    font-size: pxToRem(13px);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: center;
+    color: $photo-muted;
+    padding: 0 pxToRem(100px) $size-16;
+
+    @media (max-width: 700px) {
+      padding: 0 $size-16 $size-16;
+    }
+  }
+
+  // ── Contact ────────────────────────────────────────────────────────
+  &__contact {
+    background-color: $photo-bg;
+    color: $photo-text;
+    padding: $size-96 $size-32;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $size-24;
+  }
+
+  &__contact-title {
+    font-family: $font-display;
+    font-size: clamp(pxToRem(40px), 6vw, pxToRem(72px));
+    margin: 0;
+  }
+
+  &__contact-text {
+    font-family: $font-body;
+    font-size: pxToRem(15px);
+    color: $photo-muted;
+    margin: 0;
+    max-width: pxToRem(440px);
+    line-height: 1.7;
+  }
+
+  // La piel viene de `.cta-button`; aquí solo se corrige el hover, porque sobre
+  // el fondo casi negro la sombra del CTA global no se percibe.
+  &__contact-btn {
+    transition: background-color 0.2s ease;
+
+    // Calificado con `.cta-button` a propósito: sin eso las dos reglas de hover
+    // empatan en especificidad y el desempate queda en el orden de importación
+    // de main.scss, que es fácil de voltear sin darse cuenta.
+    &.cta-button:hover,
+    &.cta-button:focus {
+      box-shadow: none;
+      background-color: color.adjust($color-red-500, $lightness: -8%);
+    }
+  }
+}

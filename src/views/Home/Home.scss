@@ -45,23 +45,12 @@
     margin-bottom: $size-24;
   }
 
+  // Solo el layout: la piel del botón vive en `.cta-button` (main.scss).
   &__button {
-    font-size: $size-24;
-    color: $color-beige-500;
-    background-color: $color-red-500;
-    border: none;
-    padding: $size-12 $size-24 $size-8;
-    border-radius: 50px;
     align-self: flex-end;
-    text-decoration: none;
 
     &--banner {
       margin-bottom: $size-32;
-    }
-
-    &:hover,
-    &:focus {
-      box-shadow: 0 16px 24px 0 rgba(0, 0, 0, 0.12);
     }
   }
 }
@@ -341,10 +330,6 @@
     &__description {
       max-width: $size-512;
       font-size: $size-24;
-    }
-
-    &__button {
-      font-size: $size-32;
     }
   }
 
