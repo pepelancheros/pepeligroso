@@ -29,6 +29,10 @@ module.exports = {
         type: "asset/inline",
       },
       {
+        test: /\.(mp4|webm|mov)$/i,
+        type: "asset/resource",
+      },
+      {
         test: /\.(scss|css)$/,
         use: ["style-loader", "css-loader", "sass-loader"],
       },

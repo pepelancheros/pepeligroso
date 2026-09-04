@@ -3,3 +3,6 @@ dist
 .DS_Store
 .claude
 .vscode
+# Masters de video (pesados); en dist solo va el .mp4 optimizado
+public/assets/videos/*.mov
+public/assets/videos/*.master.mp4

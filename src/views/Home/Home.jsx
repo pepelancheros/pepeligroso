@@ -1,10 +1,9 @@
-import pepeSad from "../../../public/assets/images/pepe-sad.png";
-import arrow from "../../../public/assets/images/arrow.png";
+import aboutVideo from "../../../public/assets/videos/pepe-animation.mp4";
 import dicapta from "../../../public/assets/images/logo-dicapta.png";
 import githubExplorer from "../../../public/assets/images/github-explorer.png";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import useWindowDimensions from "../../utilities/useWindowDimensions.jsx";
 import Icon from "../../components/Icon/Icon.jsx";
 import TypedText from "../../components/TypedText/TypedText.jsx";
@@ -17,8 +16,32 @@ const skills = skillsJson.skills;
 import "./Home.scss";
 
 export function HomeView() {
+  const aboutVideoRef = useRef(null);
+
   useEffect(() => {
     AOS.init();
+  }, []);
+
+  // The about animation only plays while it is on screen, and picks up from
+  // where it was left when it comes back.
+  useEffect(() => {
+    const video = aboutVideoRef.current;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.muted = true;
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.25 }
+    );
+
+    observer.observe(video);
+
+    return () => observer.disconnect();
   }, []);
 
   const { pageWidth } = useWindowDimensions();
@@ -58,18 +81,19 @@ export function HomeView() {
             I use my passion and skills
             to create, and I also like feedback. So, please let me know if you find anything that could use some work. Welcome to my site :)
           </p>
-          <div className="about__images-container">
-            <div>
-              <img className="about__arrow" src={arrow} alt="" />
-              <p className="tusker-font about__pepe-text">
-                Not this one, though
-              </p>
+          <div className="about__video-container">
+            <div className="about__video-frame">
+              <video
+                ref={aboutVideoRef}
+                className="about__video"
+                src={aboutVideo}
+                aria-label="Animation of Pepe"
+                loop
+                muted
+                playsInline
+                preload="metadata"
+              />
             </div>
-            <img
-              className="about__pepe-image"
-              src={pepeSad}
-              alt="Pepe the frog crying. An internet meme of a green anthropomorphic frog with a humanoid body."
-            />
           </div>
         </div>
       </section>

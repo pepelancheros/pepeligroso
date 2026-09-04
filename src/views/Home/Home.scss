@@ -72,28 +72,49 @@
     line-height: 1.5;
   }
 
-  &__images-container {
+  &__video-container {
     display: flex;
+    // Sin esto el frame se estira al alto de la fila y la vinyeta cubre una
+    // caja mas alta que el video.
+    align-items: flex-start;
     justify-content: flex-end;
     margin-bottom: $size-16;
   }
 
-  &__arrow {
-    margin-left: $size-16;
-    margin-top: $size-32;
-    width: 100px;
+  // La viñeta difumina los bordes duros del video hacia el fondo de la pagina.
+  // Para afinar la intensidad solo hay que mover estas dos variables:
+  //   --vignette-start: hasta este radio el video se ve intacto.
+  //   --vignette-end: desde este radio ya es fondo solido.
+  // Son porcentajes del radio del contenedor, no pixeles, asi que el efecto se
+  // ve igual sea el video cuadrado o vertical.
+  &__video-frame {
+    --vignette-start: 89%;
+    --vignette-end: 100%;
+
+    position: relative;
+    width: 100%;
+    max-width: $size-256;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse closest-side at center,
+        rgba($color-beige-500, 0) var(--vignette-start),
+        $color-beige-500 var(--vignette-end)
+      );
+    }
   }
 
-  &__pepe-text {
-    font-size: $size-16;
-    color: $color-green-500;
-  }
-
-  &__pepe-image {
-    width: auto;
-    min-width: 200px;
-    max-width: 250px;
-    height: fit-content;
+  // El video es 1:1, pero se muestra en vertical: cover recorta los costados.
+  &__video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    height: auto;
+    object-fit: cover;
   }
 }
 
@@ -337,7 +358,7 @@
     margin-bottom: $size-128;
 
     &__description-container {
-      justify-content: space-between;
+      justify-content: flex-start;
       flex-direction: row;
     }
 
@@ -348,21 +369,17 @@
       order: 0;
     }
 
-    &__images-container {
-      margin-left: $size-24;
+    // Posicion de la animacion respecto al texto. El padre ya no reparte el
+    // sobrante a los extremos, asi que estos dos valores la mueven directo:
+    //   margin-left: separacion horizontal contra la columna de texto.
+    //   margin-top: negativo la sube respecto al inicio de la fila.
+    &__video-container {
+      margin-top: -$size-48;
+      margin-left: $size-192;
     }
 
-    &__arrow {
-      width: auto;
-      margin-top: $size-96;
-    }
-
-    &__pepe-text {
-      font-size: $size-24;
-    }
-
-    &__pepe-image {
-      max-width: none;
+    &__video-frame {
+      max-width: $size-384;
     }
   }
 
