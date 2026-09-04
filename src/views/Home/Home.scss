@@ -77,7 +77,10 @@
     // Sin esto el frame se estira al alto de la fila y la vinyeta cubre una
     // caja mas alta que el video.
     align-items: flex-start;
-    justify-content: flex-end;
+    // En movil el contenedor ocupa el ancho de la columna, asi que esto centra
+    // la animacion. En desktop es inocuo: ahi el contenedor mide exactamente lo
+    // mismo que el frame y no hay sobrante que repartir.
+    justify-content: center;
     margin-bottom: $size-16;
   }
 
